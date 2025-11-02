@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard{% endblock %} - Creative Education Foundation</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous" />
+  
+  <!-- Your Custom CSS -->
+  <link rel="stylesheet" href="{% static 'pages/admin.css' %}">
+  
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="img-icon"> <img src="{% static 'img/logo.png' %}" alt=""></div>
+    </div>
+
+    <div class="menu-item active">
+      <i class="fas fa-home"></i>
+      <span>Dashboard</span>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-users"></i>
+      <span>User Management</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-shield-alt"></i>
+        <span>Operation Teams</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-user-graduate"></i>
+        <span>Students</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-user-shield"></i>
+        <span>Roles And Permissions</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-th-large"></i>
+      <span>Category Management</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Categories</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Add Category</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-edit"></i>
+        <span>Manage Categories</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-book"></i>
+      <span>Course Management</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Courses</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Add Course</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-folder"></i>
+        <span>Course Categories</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-star"></i>
+        <span>Featured Courses</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-video"></i>
+      <span>Live Class Management</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-calendar"></i>
+        <span>Scheduled Classes</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Create Class</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-history"></i>
+        <span>Past Classes</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-users"></i>
+        <span>Class Attendees</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-clipboard-list"></i>
+      <span>Quiz Management</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Quizzes</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Create Quiz</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-question-circle"></i>
+        <span>Question Bank</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Quiz Results</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-user-check"></i>
+      <span>User Enrollments</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Enrollments</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-check"></i>
+        <span>Approve Requests</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-clock"></i>
+        <span>Pending Enrollments</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-certificate"></i>
+        <span>Completed Courses</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-bell"></i>
+      <span>Notification and Flash Notices</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-envelope"></i>
+        <span>All Notifications</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Create Notification</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-bullhorn"></i>
+        <span>Flash Notices</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-history"></i>
+        <span>Notification History</span>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <i class="fas fa-chart-bar"></i>
+      <span>Reports</span>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-newspaper"></i>
+      <span>Articles and Blogs</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Articles</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Create Article</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-tags"></i>
+        <span>Article Categories</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-comments"></i>
+        <span>Comments</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-cog"></i>
+      <span>Testimonials</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All Testimonials</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Add Testimonial</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Approve Testimonials</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-cog"></i>
+      <span>Manage FAQ</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-list"></i>
+        <span>All FAQs</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Add FAQ</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-folder"></i>
+        <span>FAQ Categories</span>
+      </div>
+    </div>
+
+    <div class="menu-item has-submenu">
+      <i class="fas fa-cog"></i>
+      <span>Manage Jobs</span>
+      <i class="fas fa-chevron-right menu-arrow"></i>
+    </div>
+    <div class="submenu">
+      <div class="submenu-item">
+        <i class="fas fa-briefcase"></i>
+        <span>All Jobs</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-plus"></i>
+        <span>Post Job</span>
+      </div>
+      <div class="submenu-item">
+        <i class="fas fa-users"></i>
+        <span>Job Applications</span>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <i class="fas fa-list"></i>
+      <span>Contact List</span>
+    </div>
+
+    <div class="menu-item">
+      <i class="fas fa-list"></i>
+      <span>Feedbacks List</span>
+    </div>
+
+    <div class="menu-item">
+      <i class="fas fa-list"></i>
+      <span>Manage About</span>
+    </div>
+  </div>
+
+
+
+  <!-- Main Content Area -->
+  <div class='main'>
+    <div class='search'>
+      <input type="text" placeholder="Search...">
+      <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <script>
+    // Get all menu items with submenus
+    const menuItems = document.querySelectorAll('.menu-item.has-submenu');
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', function() {
+        // Get the next sibling (submenu)
+        const submenu = this.nextElementSibling;
+        
+        // Toggle active class on submenu
+        submenu.classList.toggle('active');
+        
+        // Toggle open class on menu item (for arrow rotation)
+        this.classList.toggle('open');
+        
+        // Close other open submenus (optional - remove if you want multiple open)
+        menuItems.forEach(otherItem => {
+          if (otherItem !== this) {
+            otherItem.classList.remove('open');
+            otherItem.nextElementSibling.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

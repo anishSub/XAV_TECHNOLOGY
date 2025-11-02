@@ -1,0 +1,417 @@
+/* Breadcrumb Section */
+.breadcrumb-container {
+    background: #fff;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: #0891b2;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+    color: #0e7490;
+}
+
+.breadcrumb-separator {
+    color: #9ca3af;
+}
+
+.breadcrumb-current {
+    color: #0891b2;
+}
+
+.home-icon {
+    position: absolute;
+    right: 20px;
+    color: #0891b2;
+    transition: color 0.3s;
+}
+
+.home-icon:hover {
+    color: #0e7490;
+}
+
+/* Class Detail Section */
+.class-detail-section {
+    padding: 40px 20px 80px;
+    background: #f8f9fa;
+}
+
+.section-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.class-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 30px;
+}
+
+/* Left Column - Main Content */
+.class-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.class-banner {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.class-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.class-info-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.class-main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.class-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.class-validity {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.instructor-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.instructor-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.instructor-name {
+    color: #6b7280;
+}
+
+.enroll-btn {
+    width: 100%;
+    background: #0891b2;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.enroll-btn:hover {
+    background: #0e7490;
+}
+
+/* Tabs Section */
+.tabs-section {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-btn {
+    padding: 15px 25px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+    color: #0891b2;
+    border-bottom-color: #0891b2;
+}
+
+.tab-content {
+    padding: 25px;
+}
+
+.description-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.no-reviews {
+    font-size: 15px;
+    color: #6b7280;
+}
+
+/* Right Column - Sidebar */
+.class-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Schedule Card */
+.schedule-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0891b2;
+    margin-bottom: 20px;
+}
+
+.schedule-days {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.day-item {
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.day-item:hover {
+    background: #f3f4f6;
+}
+
+/* Remove border from active state */
+.day-item.active {
+    background: #f9fafb;
+}
+
+.day-header-simple {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.day-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.class-status {
+    font-size: 12px;
+    color: #ef4444;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: #fee2e2;
+    border-radius: 12px;
+}
+
+.chevron {
+    color: #9ca3af;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+
+.day-item.active .chevron {
+    transform: rotate(180deg);
+}
+
+.day-content {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.day-item.active .day-content {
+    display: block;
+}
+
+.time-slot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #0891b2;
+    font-weight: 500;
+}
+
+.time-slot svg {
+    color: #0891b2;
+    flex-shrink: 0;
+}
+
+.join-class-btn {
+    width: 100%;
+    background: #0891b2;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s;
+}
+
+.join-class-btn:hover {
+    background: #0e7490;
+}
+
+/* Related Classes */
+.related-classes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.related-class-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.related-class-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.related-class-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.related-class-image img {
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.related-class-content {
+    padding: 15px;
+}
+
+.rating {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 16px;
+    color: #fbbf24;
+}
+
+.related-class-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 10px;
+    min-height: 40px;
+}
+
+.related-class-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .class-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .class-sidebar {
+        order: 2;
+    }
+    
+    .related-classes {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .related-class-card {
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .class-main-title {
+        font-size: 24px;
+    }
+    
+    .class-price {
+        font-size: 20px;
+    }
+    
+    .schedule-card {
+        padding: 20px;
+    }
+    
+    .breadcrumb {
+        font-size: 13px;
+    }
+}

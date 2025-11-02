@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Enroll Now - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/liveClasses/enroll_now.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/enroll_now.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-section">
+        <h1>Payment details:</h1>
+
+        <h2>Order Summary:</h2>
+
+        <table class="order-summary-table">
+            <tbody>
+                <tr>
+                    <th>Live Class Name</th>
+                    <td id="class-name">BBS 1ST YEAR ACCOUNTANCY</td>
+                </tr>
+                <tr>
+                    <th>Product ID</th>
+                    <td id="product-id">4</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td id="price">2000</td>
+                </tr>
+                <tr>
+                    <th>Discount</th>
+                    <td id="discount">0</td>
+                </tr>
+                <tr class="total-row">
+                    <th>Total</th>
+                    <td id="total">2000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Select Payment Wallet:</h2>
+
+        <div class="wallet-options">
+            <div class="wallet-card" data-wallet="esewa">
+                <img src="{% static 'img/esewa.png' %}" alt="eSewa">
+            </div>
+            <div class="wallet-card" data-wallet="khalti">
+                <img src="{% static 'img/khalti.png' %}" alt="Khalti">
+            </div>
+        </div>
+
+        <button class="proceed-btn" id="proceed-btn" disabled>Proceed to Payment</button>
+    </div>
+</div>
+{% endblock %}

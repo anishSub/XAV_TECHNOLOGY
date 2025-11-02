@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/home.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-container">
+        <!-- Left side - Logo -->
+        <div class="hero-logo">
+            <div class="logo-card">
+                <img src="{% static 'img/logo.png' %}" alt="Creative Education Foundation">
+            </div>
+        </div>
+
+        <!-- Right side - Content -->
+        <div class="hero-content">
+            <div class="content-card">
+                <p class="hero-subtitle">Bringing Quality Education to Your Fingertips</p>
+                <h1 class="hero-title">Join with us to Achieve More with Creative Learning</h1>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-explore">Explore Courses</a>
+                    <a href="#" class="btn-learn">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Courses Section -->
+<section class="courses-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Our Courses</h2>
+        </div>
+
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'img/logo.png' %}" alt="Classes">
+                </div>
+                <h3 class="course-title">Classes</h3>
+            </div>
+            <!-- Add more course cards as needed -->
+        </div>
+    </div>
+    <a href="{% url 'courses' %}" class="view-more">
+                View more 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m12 16 4-4-4-4M8 12h8"/>
+                </svg>
+            </a>
+</section>
+
+
+<!-- Live Classes Section -->
+<section class="live-classes-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Live Classes</h2>
+            
+        </div>
+
+        <div class="live-classes-grid">
+            <!-- Live Class Card 1 -->
+            <a href="{% url 'online_class_extra1' %}" class="live-class-card">
+                <div class="live-class-image">
+
+                    <img src="{% static 'img/1.png' %}" alt="BBS 1ST YEAR ACCOUNTANCY">
+                </div>
+                <div class="live-class-content">
+                    <div class="rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <h3 class="live-class-title">BBS 1ST YEAR ACCOUNTANCY</h3>
+                    <p class="live-class-price">Rs. 2,000</p>
+                    <div class="live-class-schedule">
+                        <div class="schedule-row">
+                            <span class="schedule-label">Today</span>
+                            <span class="schedule-time">1:49 PM - 2:50 PM</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-label">Session:</span>
+                            <span class="schedule-time"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+            <!-- Live Class Card 2 -->
+
+              <a href="{% url 'online_class_extra2' %}" class="live-class-card">
+                <div class="live-class-image">
+
+                    <img src="{% static 'img/2.png' %}" alt="BBS 1ST YEAR BUSINESS MATH">
+                </div>
+                
+                <div class="live-class-content">
+                    <div class="rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <h3 class="live-class-title">BBS 1ST YEAR BUSINESS MATH</h3>
+                    <p class="live-class-price">Rs. 2,000</p>
+                    <div class="live-class-schedule">
+                        <div class="schedule-row">
+                            <span class="schedule-label">Today</span>
+                            <span class="schedule-time">8:00 AM - 9:00 AM</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-label">Session:</span>
+                            <span class="schedule-time"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+            <!-- Live Class Card 3 -->
+              <a href="{% url 'online_class_extra3' %}" class="live-class-card">
+                <div class="live-class-image">
+                    <img src="{% static 'img/3.png' %}" alt="English & Social Grade Increment Live Class">
+                </div>
+                <div class="live-class-content">
+                    <div class="rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <h3 class="live-class-title">English & Social Grade Increment Live Class</h3>
+                    <p class="live-class-price">Rs. 2,000</p>
+                    <div class="live-class-schedule">
+                        <div class="schedule-row">
+                            <span class="schedule-label">Today</span>
+                            <span class="schedule-time">7:00 AM - 8:00 AM</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-label">Session:</span>
+                            <span class="schedule-time"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Live Class Card 4 -->
+            <a href="{% url 'online_class_extra3' %}" class="live-class-card">
+                <div class="live-class-image">
+                    <img src="{% static 'img/4.png' %}" alt="Account Grade Increment Live Class">
+                </div>
+                <div class="live-class-content">
+                    <div class="rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <h3 class="live-class-title">Account Grade Increment Live Class</h3>
+                    <p class="live-class-price">Rs. 2,000</p>
+                    <div class="live-class-schedule">
+                        <div class="schedule-row">
+                            <span class="schedule-label">Today</span>
+                            <span class="schedule-time">6:00 AM - 7:00 AM</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-label">Session:</span>
+                            <span class="schedule-time"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    <a href="{% url 'online_classes'%}" class="view-more">
+                View more 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m12 16 4-4-4-4M8 12h8"/>
+                </svg>
+            </a>
+</section>
+
+<!-- Mock Test Section -->
+<section class="courses-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Mock Test</h2>
+            
+        </div>
+
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'img/logo.png' %}" alt="Classes">
+                </div>
+                <h3 class="course-title">Mock Test</h3>
+            </div>
+            <!-- Add more course cards as needed -->
+        </div>
+    </div>
+    <a href="{% url 'mock_test' %}" class="view-more">
+                View more 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m12 16 4-4-4-4M8 12h8"/>
+                </svg>
+            </a>
+</section>
+
+
+
+{% comment %} Question answer section {% endcomment %}
+<section class="faq-section">
+    <div class="faq-container">
+        <!-- Header -->
+        <div class="faq-header">
+            <div>
+                <h2>Frequently Asked Questions</h2>
+                <p class="faq-subtitle">Find answers to some of the most commonly asked questions about our e-learning system.</p>
+            </div>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="faq-items">
+            <!-- FAQ Item 1 -->
+            <div class="faq-item active">
+                <button class="faq-question">
+                    <span>What is Creative Education Foundation and how does it support e-learning in Nepal?</span>
+                    <span class="faq-icon">−</span>
+                </button>
+                <div class="faq-answer">
+                    <p>CEF is an educational platform dedicated to providing accessible, engaging, and cost-effective online learning solutions across Nepal. We offer live classes, recorded lectures, and comprehensive study materials tailored to your syllabus.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What types of learning materials are available on the CEF platform?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Our platform offers a wide range of learning materials including live interactive classes, recorded video lectures, PDF study materials, practice tests, assignments, and mock exams. All materials are designed to align with your curriculum and help you succeed in your studies.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Why Choose Creative Education Foundation?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>We provide affordable, high-quality education with experienced instructors, flexible learning schedules, interactive live classes, comprehensive study materials, and personalized support. Our platform is designed specifically for Nepali students with content in both English and Nepali languages.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 4 -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Why Choose Our Tuition Classes?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Our tuition classes feature expert teachers with years of experience, small batch sizes for personalized attention, regular assessments and feedback, doubt-clearing sessions, and proven track records of student success. We focus on both conceptual understanding and exam preparation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% comment %} {% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Creative Education Foundation</title>
+    <link rel="stylesheet" href="{% static 'pages/accounts/login.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2 class="welcome-text">Welcome Back !!</h2>
+            <h1 class="login-title">Log In</h1>
+
+            <form method="POST" action="{% url 'login' %}" class="login-form">
+                {% csrf_token %}
+                
+                <!-- Email Input -->
+                <div class="input-group">
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="email" 
+                        placeholder="Enter your email" 
+                        required
+                        class="input-field"
+                    >
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group password-group">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        placeholder="Enter your Password" 
+                        required
+                        class="input-field"
+                    >
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">Login</button>
+
+                <!-- Register Link -->
+                <p class="register-link">
+                    Don't have an account? 
+                    <a href="#">Register</a>
+                </p>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+
+                <!-- Google Sign In -->
+                <button type="button" class="google-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                </button>
+            </form>
+
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Password Visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle icon
+            this.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Apply - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/vacancies.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="application-section">
+    <div class="application-container">
+        <div class="application-header">
+            <h1>Apply For this position</h1>
+            {% comment %} <span class="application-date"> </span> {% endcomment %}
+            <a href="{% url 'vacancies_description' %}" class="close-application">&times;</a>
+        </div>
+        
+        <form class="application-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="fullName">Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" name="full_name" placeholder="Enter Your Name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Enter your valid email address" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone number <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your valid phone number" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cv">Upload CV <span class="required">*</span></label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="cv" name="cv" accept=".pdf" required hidden>
+                    <label for="cv" class="file-upload-label">
+                        <span class="file-placeholder" id="fileName">Please make sure to include your CV (PDF only)</span>
+                        <span class="upload-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Upload a file
+                        </span>
+                    </label>
+                </div>
+                <p class="file-note">Only one PDF file is allowed (max 4MB).</p>
+            </div>
+            
+            <div class="payment-section">
+                <h3>Payment Method:</h3>
+                <p>You have to pay Rs. 100 to submit application via Khalti</p>
+                <img src="{% static 'img/logo1.png' %}" alt="Khalti" class="khalti-logo">
+            </div>
+            
+            <button type="submit" class="btn-submit-application">Submit Application</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// File upload display name
+document.getElementById('cv').addEventListener('change', function(e) {
+    const fileName = e.target.files[0]?.name || 'Please make sure to include your CV (PDF only)';
+    document.getElementById('fileName').textContent = fileName;
+});
+</script>
+{% endblock %}

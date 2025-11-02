@@ -1,0 +1,360 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Header Styles */
+/* Header Styles */
+.main-header {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 15px 0;
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo {
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 70px;
+    width: auto;
+    display: block;
+}
+
+.search-container {
+    position: relative;
+    flex: 0 0 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #0891b2;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;  /* Added this */
+    gap: 30px;
+    margin-left: auto;
+}
+
+.main-nav a {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+    white-space: nowrap;
+    display: flex;  /* Added this */
+    align-items: center;  /* Added this */
+}
+
+.main-nav a:hover {
+    color: #0891b2;
+}
+
+.nav-vacancies {
+    background: #fbbf24;
+    padding: 10px 20px;  /* Changed from 8px to 10px to match buttons */
+    border-radius: 8px;
+    color: #000 !important;
+    font-weight: 600;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;  /* Added this */
+    gap: 15px;
+}
+
+.btn-login {
+    padding: 10px 24px;
+    border: 2px solid #0891b2;
+    border-radius: 8px;
+    color: #0891b2;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-block;  /* Added this */
+    text-align: center;  /* Added this */
+}
+
+.btn-login:hover {
+    background: #0891b2;
+    color: #fff;
+}
+
+.btn-signup {
+    padding: 10px 24px;
+    background: #0891b2;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.3s;
+    display: inline-block;  /* Added this */
+    text-align: center;  /* Added this */
+}
+
+.btn-signup:hover {
+    background: #0e7490;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+}
+
+/* Footer Styles */
+.main-footer {
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    color: #fff;
+    padding: 60px 0 0;
+    margin-top: 0;  /* Changed from 80px to 0 */
+    position: relative;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1.3fr 1.5fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #fff;
+    display: inline-block;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-logo {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.footer-logo img {
+    height: 120px;
+    width: auto;
+    display: block;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+.footer-column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-column ul li a {
+    color: #fff;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+    font-size: 15px;
+}
+
+.footer-column ul li a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.contact-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.contact-list svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.app-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.app-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    color: #000;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.app-btn:hover {
+    transform: translateY(-2px);
+}
+
+.app-btn > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-get {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.app-store {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.scroll-top {
+    position: absolute;
+    right: 40px;
+    bottom: 100px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.scroll-top:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .header-container {
+        flex-wrap: wrap;
+    }
+    
+    .search-container {
+        flex: 1 1 300px;
+    }
+    
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        gap: 15px;
+    }
+    
+    .main-nav {
+        width: 100%;
+        margin-top: 20px;
+        order: 3;
+        justify-content: center;
+    }
+    
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .scroll-top {
+        right: 20px;
+        bottom: 80px;
+    }
+}

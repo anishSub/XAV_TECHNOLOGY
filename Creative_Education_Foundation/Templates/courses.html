@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/courses.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Our Courses Section -->
+<section class="courses-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Our Courses</h2>
+        </div>
+
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="{% static 'img/logo.png' %}" alt="Classes">
+                </div>
+                <h3 class="course-title">Classes</h3>
+            </div>
+            <!-- Add more course cards as needed -->
+        </div>
+    </div>
+    <a href="{% url 'courses' %}" class="view-more">
+                View more 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m12 16 4-4-4-4M8 12h8"/>
+                </svg>
+            </a>
+</section>
+{% endblock %}

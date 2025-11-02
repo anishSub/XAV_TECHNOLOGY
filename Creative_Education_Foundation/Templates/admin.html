@@ -1,0 +1,282 @@
+
+{% extends 'Admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="system-overview dashboard-section">
+  <div>
+    <p class='heading-paragraph'>System Overview Stats</p>
+    <p>Key performance indicators and system metrics</p>
+  </div>
+  <div class="stats-grid">
+    <!-- Row 1 -->
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value">32</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Active Users</div>
+        <div class="stat-value">32</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon red">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Inactive Users</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon cyan">
+        <i class="fas fa-chalkboard-teacher"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Teachers</div>
+        <div class="stat-value">1</div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-user-graduate"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Students</div>
+        <div class="stat-value">28</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Courses</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-clipboard-list"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Quizzes</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">
+        <i class="fas fa-video"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Live Classes</div>
+        <div class="stat-value">4</div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-user-check"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total User Enrollment</div>
+        <div class="stat-value">3</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-book-reader"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Courses Enrollment</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <i class="fas fa-clipboard-check"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Quizzes Enrollment</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">
+        <i class="fas fa-user-friends"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Live Classes Enrollment</div>
+        <div class="stat-value">3</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='zoom-mettings dashboard-section'>
+<p class='heading-paragraph'>Zoom mettings </p>
+
+<div class="zoom-header zoom-row">
+    <span><p>Topic</p></span>
+    <span>Meeting ID</span>
+    <span>Meeting URL</span>
+    <span>Duration</span>
+    <span>Actions</span>
+    <span>Start Time</span>
+  </div>
+
+  {# repeat for each meeting #}
+  <div class="zoom-row">
+    <span>{{ meeting.topic }}</span>
+    <span>{{ meeting.id }}</span>
+    <span><a href="{{ meeting.url }}">Link</a></span>
+    <span>{{ meeting.duration }} min</span>
+    <span>
+      <button>Join</button>
+      <button>Copy</button>
+    </span>
+    <span>{{ meeting.start_time }}</span>
+  </div>
+</div>
+
+
+<div class='financial-overview dashboard-section'>
+  <p class='heading-paragraph'> Financial Overview </p>
+  <p>Revenue stats and growth metrics</p>
+
+  <div class='financial-stats-grid'>
+    <div class='stat-card'>
+      <div class='stat-icon' style='background-color: #e8e5ff;'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6d5bd0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+      </div>
+      <div class='stat-content'>
+        <span class='stat-label'>Total Income</span>
+        <span class='stat-value'>NPR 6,000.00</span>
+      </div>
+    </div>
+
+    <div class='stat-card'>
+      <div class='stat-icon' style='background-color: #d4f8e8;'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      </div>
+      <div class='stat-content'>
+        <span class='stat-label'>Monthly Income</span>
+        <span class='stat-value'>NPR 0.00</span>
+      </div>
+    </div>
+
+    <div class='stat-card'>
+      <div class='stat-icon' style='background-color: #fee;'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      </div>
+      <div class='stat-content'>
+        <span class='stat-label'>Yearly Income</span>
+        <span class='stat-value'>NPR 6,000.00</span>
+      </div>
+    </div>
+
+    <div class='stat-card'>
+      <div class='stat-icon' style='background-color: #d1f0ff;'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
+      </div>
+      <div class='stat-content'>
+        <span class='stat-label'>Growth Percentage</span>
+        <span class='stat-value'>0.00%</span>
+      </div>
+    </div>
+  </div>
+
+<!-- Placeholder for User Activity Chart -->
+  <div class="scrollable-container">
+  <table class="financial-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>USER</th>
+        <th>ENROLL ITEM</th>
+        <th>TRANSACTION ID</th>
+        <th>AMOUNT</th>
+        <th>PAYMENT STATUS</th>
+        <th>PAYMENT AMOUNT</th>
+        <th>ENROLLMENT STATUS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>
+          <div class="user-info">
+            <img src="static/img/download.jpeg" alt="Surya Poudel" class="user-avatar">
+            <span>Surya Poudel</span>
+          </div>
+        </td>
+        <td>
+          <span class="live-class-badge">LIVE CLASS:</span>  Social Live Class
+        </td>
+        <td>000BM50</td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-paid">Paid</span></td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-enrolled">Enrolled</span></td>
+      </tr>
+
+      {% comment %} second person  {% endcomment %}
+      <tr>
+        <td>2</td>
+        <td>
+          <div class="user-info">
+            <img src="static/img/download.jpeg" alt="Sagar Timilsina" class="user-avatar">
+            <span>Samir Timilsina</span>
+          </div>
+        </td>
+        <td>
+          <span class="live-class-badge">LIVE CLASS:</span> BBS 1ST YEAR MATH
+        </td>
+        <td>TXN-7-3-20250829124650-C1DA8B</td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-paid">Paid</span></td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-enrolled">Enrolled</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>
+          <div class="user-info">
+            <img src="static/img/download.jpeg" alt="Sagar Timilsina" class="user-avatar">
+            <span>Anish Subedi</span>
+          </div>
+        </td>
+        <td>
+          <span class="live-class-badge">LIVE CLASS:</span> BBS 1ST YEAR 
+        </td>
+        <td>TXN-7-4-20250903140720-7FEF57</td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-paid">Paid</span></td>
+        <td>2000.00</td>
+        <td><span class="status-badge status-enrolled">Enrolled</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
