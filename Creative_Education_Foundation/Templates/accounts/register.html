@@ -27,15 +27,43 @@
                     </div>
                 {% endif %}
                 
-                <!-- Full Name Input -->
+                <!-- Username Input -->
                 <div class="input-group">
                     <input 
                         type="text" 
-                        name="full_name" 
-                        id="full_name" 
-                        placeholder="Enter your Full Name" 
+                        name="username" 
+                        id="username" 
+                        placeholder="Enter your username" 
                         required
                         class="input-field"
+                        value="{{ form.username.value|default:'' }}"
+                    >
+                </div>
+
+
+                <!-- First Name Input -->
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        id="first_name" 
+                        placeholder="Enter your first name" 
+                        required
+                        class="input-field"
+                        value="{{ form.first_name.value|default:'' }}"
+                    >
+                </div>
+
+                <!-- Last Name Input -->
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        id="last_name" 
+                        placeholder="Enter your last name" 
+                        required
+                        class="input-field"
+                        value="{{ form.last_name.value|default:'' }}"
                     >
                 </div>
 
@@ -48,18 +76,20 @@
                         placeholder="Enter your email" 
                         required
                         class="input-field"
+                        value="{{ form.email.value|default:'' }}"
                     >
                 </div>
 
-                <!-- Phone Number Input -->
+                <!-- Mobile Number Input -->
                 <div class="input-group">
                     <input 
                         type="tel" 
-                        name="phone" 
-                        id="phone" 
-                        placeholder="Enter your phone number" 
+                        name="mobile_number" 
+                        id="mobile_number" 
+                        placeholder="Enter your mobile number" 
                         required
                         class="input-field"
+                        value="{{ form.mobile_number.value|default:'' }}"
                     >
                 </div>
 
@@ -67,13 +97,13 @@
                 <div class="input-group password-group">
                     <input 
                         type="password" 
-                        name="password" 
-                        id="password" 
-                        placeholder="Enter your Password" 
+                        name="password1" 
+                        id="password1" 
+                        placeholder="Enter your password" 
                         required
                         class="input-field"
                     >
-                    <button type="button" class="toggle-password" data-target="password">
+                    <button type="button" class="toggle-password" data-target="password1">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                             <circle cx="12" cy="12" r="3"/>
@@ -85,13 +115,13 @@
                 <div class="input-group password-group">
                     <input 
                         type="password" 
-                        name="confirm_password" 
-                        id="confirm_password" 
-                        placeholder="Enter your Confirm Password" 
+                        name="password2" 
+                        id="password2" 
+                        placeholder="Confirm your password" 
                         required
                         class="input-field"
                     >
-                    <button type="button" class="toggle-password" data-target="confirm_password">
+                    <button type="button" class="toggle-password" data-target="password2">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                             <circle cx="12" cy="12" r="3"/>
@@ -141,26 +171,7 @@
                 this.classList.toggle('active');
             });
         });
-
-        // Password match validation
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm_password');
-
-        confirmPassword.addEventListener('input', function() {
-            if (password.value !== confirmPassword.value) {
-                confirmPassword.setCustomValidity("Passwords don't match");
-            } else {
-                confirmPassword.setCustomValidity('');
-            }
-        });
-
-        password.addEventListener('input', function() {
-            if (confirmPassword.value && password.value !== confirmPassword.value) {
-                confirmPassword.setCustomValidity("Passwords don't match");
-            } else {
-                confirmPassword.setCustomValidity('');
-            }
-        });
     </script>
+    
 </body>
 </html>

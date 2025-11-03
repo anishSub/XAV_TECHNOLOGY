@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
+from .models import UserProfile
 
 
 # Create your views here.
@@ -21,4 +22,8 @@ class RegisterView(CreateView):
     
     def form_valid(self, form):
         # Custom registration logic here if needed
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        mobile_number = form.cleaned_data.get('mobile_number')
+        UserProfile.objects.create(user=self.object, mobile_number=mobile_number)
+        return response
+    
