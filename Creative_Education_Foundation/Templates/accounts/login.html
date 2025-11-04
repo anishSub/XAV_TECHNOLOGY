@@ -13,6 +13,17 @@
             <h2 class="welcome-text">Welcome Back !!</h2>
             <h1 class="login-title">Log In</h1>
 
+            <!-- Display Messages -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <form method="POST" action="{% url 'login' %}" class="login-form">
                 {% csrf_token %}
                 
@@ -25,6 +36,7 @@
                         placeholder="Enter your email" 
                         required
                         class="input-field"
+                        value="{{ request.POST.email }}"
                     >
                 </div>
 
@@ -52,7 +64,7 @@
                         <input type="checkbox" name="remember" id="remember">
                         <span>Remember me</span>
                     </label>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <a href="{% url 'password_reset' %}" class="forgot-password">Forgot Password?</a>
                 </div>
 
                 <!-- Login Button -->

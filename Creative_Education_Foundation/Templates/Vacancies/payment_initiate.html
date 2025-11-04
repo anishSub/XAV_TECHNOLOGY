@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/vacancies/payment_initiate.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-header">
+        <div class="payment-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+            </svg>
+        </div>
+        <h1>Complete Your Payment</h1>
+        <p>Application fee for vacancy position</p>
+    </div>
+    
+    {% if application %}
+    <div class="payment-details">
+        <div class="detail-row">
+            <span class="detail-label">Applicant Name:</span>
+            <span class="detail-value">{{ application.full_name }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ application.email }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Application ID:</span>
+            <span class="detail-value">#{{ application.id }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Amount to Pay:</span>
+            <span class="detail-value">Rs. {{ application.payment_amount }}</span>
+        </div>
+    </div>
+    
+    <div class="khalti-section">
+        <p>Pay securely with Khalti</p>
+        <img src="{% static 'img/logo1.png' %}" alt="Khalti" class="khalti-logo">
+        
+        <button type="button" class="btn-pay" id="payment-button">
+            Pay Rs. {{ application.payment_amount }} with Khalti
+        </button>
+        
+        <a href="{% url 'vacancies_description' %}" class="btn-cancel">Cancel and go back</a>
+    </div>
+    
+    <div class="payment-note">
+        <strong>Note:</strong> You will be redirected to Khalti payment gateway. Please complete the payment to submit your application.
+    </div>
+    {% else %}
+    <div class="payment-note">
+        <strong>Error:</strong> Application not found. Please try again.
+    </div>
+    <a href="{% url 'vacancies_apply' %}" class="btn-pay" style="display: inline-block; text-decoration: none;">Go Back to Application</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Khalti payment integration would go here
+    document.getElementById('payment-button').addEventListener('click', function() {
+        // For now, simulate payment success
+        // In production, integrate with Khalti API
+        alert('Redirecting to Khalti payment gateway...');
+        
+        // Simulate successful payment (remove this in production)
+        setTimeout(function() {
+            window.location.href = "{% url 'payment_success' %}?transaction_id=TEST" + Date.now();
+        }, 1000);
+    });
+</script>
+{% endblock %}

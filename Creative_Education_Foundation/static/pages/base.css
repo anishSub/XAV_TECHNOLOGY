@@ -358,3 +358,343 @@ ul {
         bottom: 80px;
     }
 }
+
+
+        /* Profile Dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    color: white;
+    border: 3px solid #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(8, 145, 178, 0.3);
+    outline: none;
+}
+
+.profile-button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 5px 15px rgba(8, 145, 178, 0.5);
+}
+
+.profile-button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.profile-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.dropdown-header .user-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.dropdown-header .user-email {
+    font-size: 14px;
+    opacity: 0.95;
+    word-break: break-all;
+}
+
+.dropdown-menu-item {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.dropdown-menu-item:hover {
+    background: #f0f9ff;
+    padding-left: 26px;
+}
+
+.dropdown-menu-item svg {
+    width: 20px;
+    height: 20px;
+    color: #0891b2;
+    flex-shrink: 0;
+}
+
+.dropdown-menu-item.logout {
+    color: #dc2626;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 6px;
+}
+
+.dropdown-menu-item.logout svg {
+    color: #dc2626;
+}
+
+.dropdown-menu-item.logout:hover {
+    background: #fef2f2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .messages-container {
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .dropdown-menu {
+        right: -10px;
+        min-width: 260px;
+    }
+    
+    .profile-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+        /* Messages */
+.messages-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 400px;
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background-color: #d4f8e8;
+    color: #16a34a;
+    border: 1px solid #86efac;
+}
+
+.alert-error {
+    background-color: #fee;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.alert-info {
+    background-color: #d1f0ff;
+    color: #0369a1;
+    border: 1px solid #7dd3fc;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-button {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: 2px solid #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    outline: none;
+}
+
+.profile-button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+}
+
+.profile-button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    min-width: 260px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.profile-dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 20px;
+    background:#0891b2;
+    color: white;
+}
+
+.dropdown-header .user-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.dropdown-header .user-email {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.dropdown-menu-item {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dropdown-menu-item:hover {
+    background: #f8f9fa;
+    padding-left: 24px;
+}
+
+.dropdown-menu-item svg {
+    width: 18px;
+    height: 18px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.dropdown-menu-item.logout {
+    color: #dc2626;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 4px;
+}
+
+.dropdown-menu-item.logout svg {
+    color: #dc2626;
+}
+
+.dropdown-menu-item.logout:hover {
+    background: #fee;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .messages-container {
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .dropdown-menu {
+        right: -10px;
+        min-width: 240px;
+    }
+}

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import UserProfile
+
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -12,6 +14,21 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'mobile_number', 'password1', 'password2']
+        
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        
+        if commit:
+            user.save()
+            # Create or update profile with mobile number
+            UserProfile.objects.create(
+                user=user,
+                mobile_number=self.cleaned_data['mobile_number']
+            )
+        return user
         
         
     def clean_mobile_number(self):

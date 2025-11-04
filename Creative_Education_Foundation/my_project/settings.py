@@ -81,8 +81,8 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Creative_Education_Foundation',
-        'USER': 'root',
+        'NAME': 'creative_education_db',
+        'USER': 'anish',
         'PASSWORD': 'Anish#937',
         'HOST': 'localhost',  # or the IP of your database server
         'PORT': '3306',
@@ -137,3 +137,15 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# File upload settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4MB
+
+LOGIN_URL = 'login'  # This should match the name of your login URL pattern
+LOGIN_REDIRECT_URL = 'home'  # This should match the name of the URL you want to redirect to after login
