@@ -1,215 +1,88 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home - Creative Education Foundation{% endblock %}
+{% block title %}{{ vacancy.title }} - Creative Education Foundation{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'pages/vacancies/vacancies.css' %}">
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/home.js' %}"></script>
-{% endblock %}
-
-
 {% block content %}
 <section class="job-detail-section">
     <div class="job-detail-container">
-        <!-- Job Header -->
         <div class="detail-header">
             <div class="detail-image">
-                <img src="{% static 'img/download.jpeg' %}" alt="Tuition Teacher">
+                <img src="{% static 'img/download.jpeg' %}" alt="{{ vacancy.title }}">
             </div>
             
             <div class="detail-main">
-                <h1 class="detail-title">Tuition Teacher</h1>
+                <h1 class="detail-title">{{ vacancy.title }}</h1>
                 
                 <div class="detail-meta">
                     <div class="meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                        </svg>
-                        <span>Part-Time</span>
+                        <span>{{ vacancy.get_employment_type_display }}</span>
                     </div>
-                    
                     <div class="meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        <span>Home Tuition Teacher</span>
+                        <span>{{ vacancy.location }}</span>
                     </div>
-                    
                     <div class="meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                            <polyline points="9 22 9 12 15 12 15 22"/>
-                        </svg>
-                        <span>CREATIVE EDUCATION FOUNDATION PVT. LTD</span>
+                        <span>{{ vacancy.company_name }}</span>
                     </div>
-                    
                     <div class="meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        <span>Pokhara</span>
-                    </div>
-                    
-                    <div class="meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                        <span>4 Openings</span>
+                        <span>{{ vacancy.openings }} Openings</span>
                     </div>
                 </div>
                 
                 <div class="detail-info">
                     <div class="info-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="1" x2="12" y2="23"/>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                        <span>Rs. 10,000</span>
+                        <span>Rs. {{ vacancy.salary|floatformat:0 }}</span>
                     </div>
-                    
                     <div class="info-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                        <span>Mid Level</span>
+                        <span>{{ vacancy.get_level_display }}</span>
                     </div>
-                    
                     <div class="info-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        <span>Hybrid</span>
+                        <span>{{ vacancy.get_mode_display }}</span>
                     </div>
-                    
                     <div class="info-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        <span>Start: 2025-08-16</span>
+                        <span>Start: {{ vacancy.start_date }}</span>
                     </div>
-                    
                     <div class="info-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        <span>Deadline: 2026-02-15</span>
+                        <span>Deadline: {{ vacancy.deadline }}</span>
                     </div>
                 </div>
                 
                 <div class="action-buttons">
-    <a href="{% url 'vacancies_apply' %}" class="btn-apply" id="applyBtn">Apply now</a>
-    <a href="{% url 'vacancies' %}" class="btn-cancel">Cancel</a>
-</div>
+                    {% if not is_deadline_passed %}
+                        <a href="{% url 'vacancy_apply' vacancy_id=vacancy.id %}" class="btn-apply">Apply now</a>
+                    {% else %}
+                        <button class="btn-apply disabled" disabled>Deadline Passed</button>
+                    {% endif %}
+                    <a href="{% url 'vacancies_list' %}" class="btn-cancel">Back to List</a>
+                </div>
             </div>
-            
-            <button class="share-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3"/>
-                    <circle cx="6" cy="12" r="3"/>
-                    <circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                </svg>
-            </button>
         </div>
         
-        <!-- Job Details Content -->
         <div class="detail-content">
             <div class="content-section">
                 <h2>Company</h2>
-                <p class="company-name">CREATIVE EDUCATION FOUNDATION PVT. LTD</p>
+                <p>{{ vacancy.company_name }}</p>
             </div>
             
             <div class="content-section">
                 <h2>Job Description</h2>
-                <p>We are looking for a dedicated and qualified Home Tuition Teacher to provide one-on-one academic support to students in their homes. The teacher will help improve students' understanding of subjects, assist with homework, test preparation, and overall academic performance.</p>
+                <p>{{ vacancy.description }}</p>
             </div>
             
             <div class="content-section">
-                <h2>Job Qualifications</h2>
-                <p>Minimum +2 / Bachelor's degree (preferred) in a relevant field. Prior experience in home tuition or classroom teaching preferred. Strong communication and interpersonal skills. Patient, motivated, and passionate about teaching.</p>
+                <h2>Requirements</h2>
+                <p>{{ vacancy.requirements|linebreaks }}</p>
             </div>
             
             <div class="content-section">
-                <h2>Job Experience</h2>
-                <p>1 year experience in teaching sector Ability to handle multiple subjects or levels. Familiarity with the national curriculum. Basic knowledge of online teaching tools (optional).</p>
+                <h2>Responsibilities</h2>
+                <p>{{ vacancy.responsibilities|linebreaks }}</p>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Application Modal -->
-<div class="modal" id="applicationModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Apply For this position</h2>
-            <span class="modal-date">10/30/2025, 1:22:23 PM</span>
-            <button class="close-modal" id="closeModal">&times;</button>
-        </div>
-        
-        <form class="application-form" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="fullName">Full Name <span class="required">*</span></label>
-                <input type="text" id="fullName" name="full_name" placeholder="Enter Your Name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" name="email" placeholder="Enter your valid email address" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone number <span class="required">*</span></label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your valid phone number" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="cv">Upload CV <span class="required">*</span></label>
-                <div class="file-upload">
-                    <input type="file" id="cv" name="cv" accept=".pdf" required hidden>
-                    <label for="cv" class="file-upload-label">
-                        <span class="file-placeholder">Please make sure to include your CV (PDF only)</span>
-                        <span class="upload-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
-                            </svg>
-                            Upload a file
-                        </span>
-                    </label>
-                </div>
-                <p class="file-note">Only one PDF file is allowed (max 4MB).</p>
-            </div>
-            
-            <div class="payment-info">
-                <h3>Payment Method:</h3>
-                <p>You have to pay Rs. 100 to submit application via Khalti</p>
-                <img src="{% static 'img/logo.png' %}" alt="Khalti" class="khalti-logo">
-            </div>
-            
-            <button type="submit" class="btn-submit">Submit Application</button>
-        </form>
-    </div>
-</div>
-
 {% endblock %}
-

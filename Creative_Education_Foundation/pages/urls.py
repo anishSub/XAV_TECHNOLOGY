@@ -1,28 +1,32 @@
 from django.urls import path
-from .views import AdminView, BaseView, HomeView, OnlineClassesView, CoursesView, VacanciesView,MockTestView, VacanciesDiecriptionView, VacanciesFormView, OnlineClassExtraView1, OnlineClassExtraView2, OnlineClassExtraView3, OnlineClassExtraView4, EnrollNowView, PaymentInitiateView, PaymentSuccessView, PaymentFailureView, ProfileView
-
-
+from .views import (
+    AdminView, BaseView, HomeView, MockTestView,ProfileView,
+    VacancyListView, VacancyDetailView, VacancyApplicationView,
+    SimplePaymentView, ConfirmPaymentView, ApplicationSuccessView, MyApplicationsView
+)
 
 urlpatterns = [
+    # Basic pages
     path('', HomeView.as_view(), name='home'),
     path('admin1/', AdminView.as_view(), name='admin'),
     path('base/', BaseView.as_view(), name='base'),
-    path('online-classes/', OnlineClassesView.as_view(), name='online_classes'),
-    path('courses/', CoursesView.as_view(), name='courses'),
+
     path('mock-test/', MockTestView.as_view(), name='mock_test'),
-    path('vacancies/', VacanciesView.as_view(), name='vacancies'),
-    path('vacancies/description/', VacanciesDiecriptionView.as_view(), name='vacancies_description'),
-    path('vacancies/apply/', VacanciesFormView.as_view(), name='vacancies_apply'),
-    path('payment/initiate/<int:application_id>/', PaymentInitiateView.as_view(), name='payment_initiate'),
-    path('payment/success/', PaymentSuccessView.as_view(), name='payment_success'),
-    path('payment/failure/', PaymentFailureView.as_view(), name='payment_failure'),
-    
-    
-    path('online-classes/extra1/', OnlineClassExtraView1.as_view(), name='online_class_extra1'),
-    path('online-classes/extra2/', OnlineClassExtraView2.as_view(), name='online_class_extra2'),
-    path('online-classes/extra3/', OnlineClassExtraView3.as_view(), name='online_class_extra3'),
-    path('online-classes/extra4/', OnlineClassExtraView4.as_view(), name='online_class_extra4'),
-    path('online-classes/enroll-now/', EnrollNowView.as_view(), name='enroll_now'),
     path('profile/', ProfileView.as_view(), name='profile'),
     
+    # Online classes extra pages
+   
+    
+    # VACANCIES - Clean URLs (NO DUPLICATES)
+    path('vacancies/', VacancyListView.as_view(), name='vacancies'),
+    path('vacancies/<int:pk>/', VacancyDetailView.as_view(), name='vacancies_description'),
+    path('vacancies/<int:vacancy_id>/apply/', VacancyApplicationView.as_view(), name='vacancy_apply'),
+    
+    # PAYMENT
+    path('payment/<int:application_id>/', SimplePaymentView.as_view(), name='khalti_payment'),
+    path('payment/<int:application_id>/confirm/', ConfirmPaymentView.as_view(), name='confirm_payment'),
+    
+    # SUCCESS & MY APPLICATIONS
+    path('application/<int:application_id>/success/', ApplicationSuccessView.as_view(), name='application_success'),
+    path('my-applications/', MyApplicationsView.as_view(), name='my_applications'),
 ]

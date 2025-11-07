@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'pages',
+    'courses',
     
 ]
 
@@ -149,3 +150,26 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4MB
 
 LOGIN_URL = 'login'  # This should match the name of your login URL pattern
 LOGIN_REDIRECT_URL = 'home'  # This should match the name of the URL you want to redirect to after login
+
+
+# Add these to your Django settings.py
+
+# Khalti Payment Gateway Configuration
+# KHALTI_PUBLIC_KEY = 'your_khalti_public_key_here'  # Get from Khalti Dashboard
+# KHALTI_SECRET_KEY = 'your_khalti_secret_key_here'  # Get from Khalti Dashboard
+
+
+# Email Configuration (for sending application confirmations)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'subedianish937@gmail.com'
+EMAIL_HOST_PASSWORD = 'Anish#937'
+DEFAULT_FROM_EMAIL = 'Creative Education Foundation <noreply@creativeeducation.com>'
+
+# Application Fee
+VACANCY_APPLICATION_FEE = 100.00  # Rs. 100
+
+# Add 'requests' to your requirements.txt
+# requests>=2.31.0

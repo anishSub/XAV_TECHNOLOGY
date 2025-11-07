@@ -1,19 +1,16 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, FormView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib import messages
-from django.urls import reverse_lazy
-from .forms import VacancyApplicationForm
-from .models import VacancyApplication
-import json
+from django.conf import settings
+from django.db import transaction
+from django.utils import timezone
 
-# Create your views here.
-#What is TemplateView?
-# It is a ready-made Django class (django.views.generic.base.TemplateView).
-# It already contains all the logic you would otherwise write by hand in a function such as:
-# def home(request):
-#     return render(request, 'home.html', {})
+from .models import Vacancy, VacancyApplication, PaymentLog
+from .forms import VacancyApplicationForm
+
+
+# ============= BASIC VIEWS =============
 class AdminView(TemplateView):
     template_name = 'admin.html'
     
@@ -23,158 +20,167 @@ class BaseView(TemplateView):
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-class OnlineClassesView(TemplateView):
-    template_name = 'live_classes/onlineClass.html'
-    
-class CoursesView(TemplateView):
-    template_name = 'courses.html'
+
 
 class MockTestView(TemplateView):
     template_name = 'mockTest.html'
     
-class VacanciesView(TemplateView):
-    template_name = 'vacancies/vacancies.html'
-    
-class VacanciesDiecriptionView(TemplateView):
-    template_name = 'vacancies/vacancies_description.html'
-    
-class VacanciesFormView(TemplateView):
-    template_name = 'vacancies/vacancies_apply.html'
-    
-class OnlineClassExtraView1(TemplateView):
-    template_name = 'live_classes/onlineClass1.html'
-    
-class OnlineClassExtraView2(TemplateView):
-    template_name = 'live_classes/onlineClass2.html'
-    
-class OnlineClassExtraView3(TemplateView):
-    template_name = 'live_classes/onlineClass3.html'
 
-class OnlineClassExtraView4(TemplateView):
-    template_name = 'live_classes/onlineClass4.html'
-    
-class EnrollNowView(TemplateView):
-    template_name = 'live_classes/enroll_now.html'
     
     
-
-
-class VacanciesFormView(FormView):
-    template_name = 'vacancies/vacancies_apply.html'
-    form_class = VacancyApplicationForm
-    success_url = reverse_lazy('payment_success')  # Change to your success URL
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Add any additional context if needed
-        return context
     
-    def form_valid(self, form):
-        try:
-            # Save the application but don't commit yet
-            application = form.save(commit=False)
-            
-            # Here you would integrate with Khalti payment
-            # For now, we'll just save the application
-            application.payment_status = 'pending'
-            application.payment_amount = 100.00
-            application.save()
-            
-            # Store application ID in session for payment verification
-            self.request.session['application_id'] = application.id
-            
-            # Redirect to Khalti payment or success page
-            messages.success(
-                self.request,
-                f'Application submitted successfully! Application ID: {application.id}'
-            )
-            
-            # Here you would redirect to Khalti payment gateway
-            # For now, redirecting to success page
-            return redirect('payment_initiate', application_id=application.id)
-            
-        except Exception as e:
-            messages.error(
-                self.request,
-                f'An error occurred while submitting your application: {str(e)}'
-            )
-            return self.form_invalid(form)
     
-    def form_invalid(self, form):
-        messages.error(
-            self.request,
-            'Please correct the errors below and try again.'
-        )
-        return super().form_invalid(form)
-
-
-# Payment related views
-class PaymentInitiateView(TemplateView):
-    """View to initiate Khalti payment"""
-    template_name = 'vacancies/payment_initiate.html'
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        application_id = self.kwargs.get('application_id')
-        
-        try:
-            application = VacancyApplication.objects.get(id=application_id)
-            context['application'] = application
-            context['amount'] = int(application.payment_amount * 100)  # Khalti uses paisa
-        except VacancyApplication.DoesNotExist:
-            messages.error(self.request, 'Application not found.')
-        
-        return context
-
-
-class PaymentSuccessView(TemplateView):
-    """View to handle successful payment"""
-    template_name = 'vacancies/payment_success.html'
     
-    def get(self, request, *args, **kwargs):
-        # Get payment details from Khalti callback
-        transaction_id = request.GET.get('transaction_id')
-        application_id = request.session.get('application_id')
-        
-        if application_id and transaction_id:
-            try:
-                application = VacancyApplication.objects.get(id=application_id)
-                application.payment_status = 'completed'
-                application.khalti_transaction_id = transaction_id
-                application.save()
-                
-                messages.success(
-                    request,
-                    'Payment successful! Your application has been submitted.'
-                )
-            except VacancyApplication.DoesNotExist:
-                messages.error(request, 'Application not found.')
-        
-        return super().get(request, *args, **kwargs)
-
-
-class PaymentFailureView(TemplateView):
-    """View to handle failed payment"""
-    template_name = 'vacancies/payment_failure.html'
     
-    def get(self, request, *args, **kwargs):
-        application_id = request.session.get('application_id')
-        
-        if application_id:
-            try:
-                application = VacancyApplication.objects.get(id=application_id)
-                application.payment_status = 'failed'
-                application.save()
-                
-                messages.error(
-                    request,
-                    'Payment failed. Please try again.'
-                )
-            except VacancyApplication.DoesNotExist:
-                pass
-        
-        return super().get(request, *args, **kwargs)
-
 
 class ProfileView(TemplateView):
     template_name = 'profile.html'
+
+
+# ============= VACANCY VIEWS =============
+class VacancyListView(ListView):
+    """List all active vacancies"""
+    model = Vacancy
+    template_name = 'vacancies/vacancies_list.html'
+    context_object_name = 'vacancies'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        return Vacancy.objects.filter(is_active=True).order_by('-created_at')
+
+
+class VacancyDetailView(DetailView):
+    """Display single vacancy details"""
+    model = Vacancy
+    template_name = 'vacancies/vacancies_description.html'
+    context_object_name = 'vacancy'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_deadline_passed'] = self.object.is_deadline_passed()
+        return context
+
+
+class VacancyApplicationView(View):
+    """Handle vacancy application form"""
+    template_name = 'vacancies/vacancies_apply.html'
+    
+    def get(self, request, vacancy_id):
+        vacancy = get_object_or_404(Vacancy, id=vacancy_id, is_active=True)
+        
+        if vacancy.is_deadline_passed():
+            messages.error(request, 'The application deadline has passed.')
+            return redirect('vacancies_description', pk=vacancy_id)
+        
+        form = VacancyApplicationForm()
+        
+        context = {
+            'form': form,
+            'vacancy': vacancy,
+            'application_fee': 100.00,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, vacancy_id):
+        vacancy = get_object_or_404(Vacancy, id=vacancy_id, is_active=True)
+        
+        if vacancy.is_deadline_passed():
+            messages.error(request, 'The application deadline has passed.')
+            return redirect('vacancies_description', pk=vacancy_id)
+        
+        form = VacancyApplicationForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if VacancyApplication.objects.filter(vacancy=vacancy, email=email).exists():
+                messages.error(request, 'You have already applied for this position.')
+                return redirect('vacancies_description', pk=vacancy_id)
+            
+            application = form.save(commit=False)
+            application.vacancy = vacancy
+            application.payment_status = 'pending'
+            application.save()
+            
+            messages.success(request, 'Application saved. Please complete the payment.')
+            return redirect('khalti_payment', application_id=application.id)
+        
+        context = {
+            'form': form,
+            'vacancy': vacancy,
+            'application_fee': 100.00,
+        }
+        return render(request, self.template_name, context)
+
+
+# ============= PAYMENT VIEWS =============
+class SimplePaymentView(TemplateView):
+    """Simple payment page"""
+    template_name = 'vacancies/simple_payment.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        application_id = kwargs.get('application_id')
+        application = get_object_or_404(VacancyApplication, id=application_id)
+        
+        context.update({
+            'application': application,
+            'amount': application.payment_amount,
+        })
+        return context
+
+
+class ConfirmPaymentView(View):
+    """Confirm payment"""
+    
+    def post(self, request, application_id):
+        application = get_object_or_404(VacancyApplication, id=application_id)
+        
+        if application.payment_status == 'completed':
+            messages.info(request, 'Payment already completed.')
+            return redirect('application_success', application_id=application.id)
+        
+        with transaction.atomic():
+            application.payment_status = 'completed'
+            application.payment_date = timezone.now()
+            application.khalti_transaction_id = f'MANUAL_{application.id}_{timezone.now().strftime("%Y%m%d%H%M%S")}'
+            application.save()
+            
+            PaymentLog.objects.create(
+                application=application,
+                transaction_id=application.khalti_transaction_id,
+                amount=application.payment_amount,
+                status='completed',
+                payment_method='manual',
+                response_data={'note': 'Manual payment confirmation'}
+            )
+        
+        messages.success(request, 'Payment confirmed successfully!')
+        return redirect('application_success', application_id=application.id)
+
+
+class ApplicationSuccessView(TemplateView):
+    """Success page after payment"""
+    template_name = 'vacancies/application_success.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        application_id = kwargs.get('application_id')
+        application = get_object_or_404(VacancyApplication, id=application_id)
+        
+        context['application'] = application
+        return context
+
+
+class MyApplicationsView(ListView):
+    """View user's applications"""
+    model = VacancyApplication
+    template_name = 'vacancies/my_applications.html'
+    context_object_name = 'applications'
+    
+    def get_queryset(self):
+        email = self.request.GET.get('email')
+        if email:
+            return VacancyApplication.objects.filter(email=email).order_by('-applied_at')
+        return VacancyApplication.objects.none()

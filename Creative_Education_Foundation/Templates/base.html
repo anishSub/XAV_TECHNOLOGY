@@ -37,7 +37,7 @@
                 <a href="{% url 'online_classes' %}">Live classes</a>
                 <a href="{% url 'courses' %}">Courses</a>
                 <a href="{% url 'mock_test' %}">Mock tests</a>
-                <a href="{% url 'vacancies'%}" class="nav-vacancies">Vacancies</a>
+                <a href="{% url 'vacancies' %}" class="nav-vacancies">Vacancies</a>
             </nav>
 
             <!-- Auth Buttons / Profile -->
@@ -115,7 +115,8 @@
         </div>
     </header>
 
-    <!-- Messages Display -->
+
+            <!-- Messages Display -->
     {% if messages %}
         <div class="messages-container">
             {% for message in messages %}
@@ -164,13 +165,13 @@
                 <h3>Quick Link</h3>
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="#">Courses</a></li>
-                    <li><a href="#">Live classes</a></li>
-                    <li><a href="#">Mock Tests</a></li>
+                    <li><a href="{% url 'courses' %}">Courses</a></li>
+                    <li><a href="{% url 'online_classes' %}">Live classes</a></li>
+                    <li><a href="{% url 'mock_test' %}">Mock Tests</a></li>
                     <li><a href="#">Blogs</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Vacancies</a></li>
+                    <li><a href="{% url 'vacancies' %}">Vacancies</a></li>
                 </ul>
             </div>
 

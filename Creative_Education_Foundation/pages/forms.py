@@ -1,51 +1,86 @@
 from django import forms
-from .models import VacancyApplication
+from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from .models import VacancyApplication
+
 
 class VacancyApplicationForm(forms.ModelForm):
+    """Form for vacancy applications"""
+    
     class Meta:
         model = VacancyApplication
         fields = ['full_name', 'email', 'phone', 'cv']
         widgets = {
             'full_name': forms.TextInput(attrs={
-                'id': 'fullName',
+                'class': 'form-control',
                 'placeholder': 'Enter Your Name',
-                'class': 'form-control'
+                'id': 'fullName'
             }),
+            
             'email': forms.EmailInput(attrs={
-                'id': 'email',
+                'class': 'form-control',
                 'placeholder': 'Enter your valid email address',
-                'class': 'form-control'
+                'id': 'email'
             }),
+            
             'phone': forms.TextInput(attrs={
-                'id': 'phone',
+                'class': 'form-control',
                 'placeholder': 'Enter your valid phone number',
-                'class': 'form-control'
+                'id': 'phone'
             }),
+            
             'cv': forms.FileInput(attrs={
-                'id': 'cv',
+                'class': 'form-control',
                 'accept': '.pdf',
-                'hidden': True
+                'id': 'cv'
             }),
+        }
+        labels = {
+            'full_name': 'Full Name',
+            'email': 'Email',
+            'phone': 'Phone number',
+            'cv': 'Upload CV',
         }
     
     def clean_cv(self):
         cv = self.cleaned_data.get('cv')
-        if cv:
-            # Check file size (4MB = 4 * 1024 * 1024 bytes)
-            if cv.size > 4 * 1024 * 1024:
-                raise ValidationError('File size must not exceed 4MB.')
-            
-            # Check file extension
-            if not cv.name.endswith('.pdf'):
-                raise ValidationError('Only PDF files are allowed.')
-        
+
+        if not cv:
+            raise ValidationError("Please upload your CV file.")
+
+    # Ensure cv is an uploaded file, not a model FieldFile
+        if hasattr(cv, 'size'):
+            file_size = cv.size
+        elif hasattr(cv, 'file') and hasattr(cv.file, 'size'):
+            file_size = cv.file.size
+        else:
+            raise ValidationError("Invalid file object. Please upload again.")
+
+    # Convert bytes → MB
+        size_mb = file_size / (1024 * 1024)
+
+        if size_mb > 5:
+            raise ValidationError("CV file size must not exceed 5MB.")
+
+    # Optional: Only allow PDF uploads
+        if not cv.name.lower().endswith('.pdf'):
+            raise ValidationError("Only PDF files are allowed.")
+
         return cv
+
     
     def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        # Add phone number validation if needed
-        # Example: Check if it's a valid Nepali number
-        if phone and not phone.replace('+', '').replace('-', '').replace(' ', '').isdigit():
-            raise ValidationError('Please enter a valid phone number.')
+        """Validate phone number"""
+        phone = self.cleaned_data.get('phone', '')
+        phone = phone.replace(' ', '').replace('-', '')
+
+        if not phone.isdigit():
+            raise ValidationError('Phone number must contain only digits.')
+        if len(phone) < 10:
+            raise ValidationError('Phone number must be at least 10 digits.')
         return phone
+    
+    def clean_email(self):
+        """Validate and normalize email"""
+        email = self.cleaned_data.get('email')
+        return email.lower() if email else email

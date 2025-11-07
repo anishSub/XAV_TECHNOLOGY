@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/vacancies/khalti_payment.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-header">
+        <h1>Complete Your Payment</h1>
+        <p>Application Fee Payment via Khalti</p>
+    </div>
+    
+    <div class="payment-details">
+        <p><strong>Position:</strong> <span>{{ application.vacancy.title }}</span></p>
+        <p><strong>Applicant:</strong> <span>{{ application.full_name }}</span></p>
+        <p><strong>Email:</strong> <span>{{ application.email }}</span></p>
+        <p><strong>Amount:</strong> <span>Rs. {{ application.payment_amount }}</span></p>
+    </div>
+    
+    <img src="{% static 'img/logo1.png' %}" alt="Khalti" class="khalti-logo">
+    
+    <button id="payment-button" class="payment-btn">Pay with Khalti</button>
+    
+    <a href="{% url 'vacancies_description' application.vacancy.id %}" class="back-link">
+        ← Back to Vacancy Details
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+<script>
+    var config = {
+        "publicKey": "{{ khalti_public_key }}",
+        "productIdentity": "{{ product_identity }}",
+        "productName": "{{ product_name }}",
+        "productUrl": "{{ product_url }}",
+        "paymentPreference": [
+            "KHALTI",
+            "EBANKING",
+            "MOBILE_BANKING",
+            "CONNECT_IPS",
+            "SCT"
+        ],
+        "eventHandler": {
+            onSuccess (payload) {
+                console.log('Payment successful:', payload);
+                
+                // Verify payment with backend
+                fetch("{% url 'khalti_verify' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'token': payload.token,
+                        'amount': payload.amount
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Payment verified successfully!');
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert('Payment verification failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while verifying payment.');
+                });
+            },
+            onError (error) {
+                console.log('Payment error:', error);
+                alert('Payment failed. Please try again.');
+            },
+            onClose () {
+                console.log('Payment widget closed');
+            }
+        }
+    };
+
+    var checkout = new KhaltiCheckout(config);
+    
+    document.getElementById("payment-button").addEventListener("click", function() {
+        checkout.show({amount: {{ amount }}});
+    });
+</script>
+{% endblock %}

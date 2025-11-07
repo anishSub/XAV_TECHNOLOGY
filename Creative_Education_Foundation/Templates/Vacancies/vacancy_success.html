@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Application Submitted - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/vacancies/vacancy_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-icon">
+        <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+    </div>
+    
+    <h1>Application Submitted Successfully!</h1>
+    <p>Your application for <strong>{{ application.vacancy.title }}</strong> has been received and payment confirmed.</p>
+    
+    <div class="application-details">
+        <h3>Application Details</h3>
+        
+        <div class="detail-row">
+            <span class="detail-label">Application ID:</span>
+            <span class="detail-value">#{{ application.id }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Position:</span>
+            <span class="detail-value">{{ application.vacancy.title }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Applicant Name:</span>
+            <span class="detail-value">{{ application.full_name }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ application.email }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Phone:</span>
+            <span class="detail-value">{{ application.phone }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Applied Date:</span>
+            <span class="detail-value">{{ application.applied_at|date:"F d, Y" }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Payment Status:</span>
+            <span class="detail-value">
+                <span class="status-badge" style="background: #28a745; color: white;">
+                    {{ application.get_payment_status_display }}
+                </span>
+            </span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Transaction ID:</span>
+            <span class="detail-value">{{ application.khalti_transaction_id }}</span>
+        </div>
+    </div>
+    
+    <div class="next-steps">
+        <h4>What's Next?</h4>
+        <ul>
+            <li>We have received your application and will review it carefully</li>
+            <li>You will receive an email confirmation at <strong>{{ application.email }}</strong></li>
+            <li>Our team will contact shortlisted candidates via email or phone</li>
+            <li>The selection process may take 1-2 weeks</li>
+        </ul>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'vacancies_list' %}" class="btn btn-primary">View All Vacancies</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

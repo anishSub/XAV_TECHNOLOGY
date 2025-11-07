@@ -7,9 +7,6 @@
 <link rel="stylesheet" href="{% static 'pages/home.css' %}">
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/home.js' %}"></script>
-{% endblock %}
 
 {% block content %}
 <section class="hero-section">
@@ -289,6 +286,6 @@
 </section>
 {% endblock %}
 
-{% comment %} {% block extra_js %}
+{% block extra_js %}
 <script src="{% static 'js/home.js' %}"></script>
-{% endblock %} {% endcomment %}
+{% endblock %}
