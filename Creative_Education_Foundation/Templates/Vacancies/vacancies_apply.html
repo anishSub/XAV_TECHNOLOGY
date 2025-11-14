@@ -1,20 +1,17 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block title %}Apply - Creative Education Foundation{% endblock %}
+{% block title %}Enroll Now - {{ course.title }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'pages/vacancies/vacancies.css' %}">
+<link rel="stylesheet" href="{% static 'pages/liveClasses/enroll_now.css' %}">
 {% endblock %}
 
 {% block content %}
-<section class="application-section">
-    <div class="application-container">
-        <div class="application-header">
-            <h1>Apply For {{ vacancy.title }}</h1>
-            <a href="{% url 'vacancies_description' pk = vacancy.id  %}" class="close-application">&times;</a>
-        </div>
-        
+<div class="payment-container">
+    <div class="payment-section">
+        <h1>Payment Details</h1>
+
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
@@ -24,96 +21,104 @@
                 {% endfor %}
             </div>
         {% endif %}
-        
-        <form class="application-form" method="POST" enctype="multipart/form-data">
+
+        <h2>Order Summary</h2>
+
+        <table class="order-summary-table">
+            <tbody>
+                <tr>
+                    <th>Course Name</th>
+                    <td>{{ course.title }}</td>
+                </tr>
+                <tr>
+                    <th>Course ID</th>
+                    <td>{{ course.id }}</td>
+                </tr>
+                <tr>
+                    <th>Original Price</th>
+                    <td>Rs. {{ course.price }}</td>
+                </tr>
+                <tr>
+                    <th>Discount ({{ course.discount_percentage }}%)</th>
+                    <td>Rs. {{ discount|floatformat:2 }}</td>
+                </tr>
+                <tr class="total-row">
+                    <th>Total Amount</th>
+                    <td><strong>Rs. {{ discounted_price|floatformat:2 }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Select Payment Method</h2>
+
+        <form method="POST" action="{% url 'confirm_enrollment_payment' enrollment.id %}" id="payment-form">
             {% csrf_token %}
             
-            <div class="form-group">
-                <label for="id_full_name">Full Name <span class="required">*</span></label>
-                {{ form.full_name }}
-                {% if form.full_name.errors %}
-                    <span class="error">{{ form.full_name.errors.0 }}</span>
-                {% endif %}
+            <div class="wallet-options">
+                <label class="wallet-card">
+                    <input type="radio" name="payment_method" value="esewa" required>
+                    <img src="{% static 'img/esewa.png' %}" alt="eSewa">
+                </label>
+                <label class="wallet-card">
+                    <input type="radio" name="payment_method" value="khalti" required>
+                    <img src="{% static 'img/khalti.png' %}" alt="Khalti">
+                </label>
             </div>
-            
-            <div class="form-group">
-                <label for="id_email">Email <span class="required">*</span></label>
-                {{ form.email }}
-                {% if form.email.errors %}
-                    <span class="error">{{ form.email.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="id_phone">Phone number <span class="required">*</span></label>
-                {{ form.phone }}
-                {% if form.phone.errors %}
-                    <span class="error">{{ form.phone.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="id_cv">Upload CV <span class="required">*</span></label>
-                <div class="file-upload-wrapper">
-                    <input type="file" id="id_cv" name="cv" accept=".pdf" required hidden>
-                    <label for="id_cv" class="file-upload-label">
-                        <span class="file-placeholder" id="fileName">Please make sure to include your CV (PDF only)</span>
-                        <span class="upload-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
-                            </svg>
-                            Upload a file
-                        </span>
-                    </label>
-                </div>
-                <p class="file-note">Only one PDF file is allowed (max 4MB).</p>
-                {% if form.cv.errors %}
-                    <span class="error">{{ form.cv.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="payment-section">
-                <h3>Payment Method:</h3>
-                <p>You have to pay Rs. {{ application_fee }} to submit application via Khalti</p>
-                <img src="{% static 'img/logo1.png' %}" alt="Khalti" class="khalti-logo">
-            </div>
-            
-            <button type="submit" class="btn-submit-application">Proceed to Payment</button>
+
+            <input type="hidden" name="transaction_id" id="transaction-id" value="">
+
+            <button type="submit" class="proceed-btn" id="proceed-btn">
+                Proceed to Payment
+            </button>
         </form>
+
+        <div class="payment-note">
+            <p><strong>Note:</strong> You will have access to this course for 1 year after successful payment.</p>
+        </div>
     </div>
-</section>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-
-
 <script>
-// File upload display name
-document.getElementById('id_cv').addEventListener('change', function(e) {
-    const fileName = e.target.files[0]?.name || 'Please make sure to include your CV (PDF only)';
-    document.getElementById('fileName').textContent = fileName;
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('payment-form');
+    const paymentMethodInputs = document.querySelectorAll('input[name="payment_method"]');
     
-    // Validate file size
-    if (e.target.files[0]) {
-        const fileSize = e.target.files[0].size / (1024 * 1024); // Convert to MB
-        if (fileSize > 4) {
-            alert('File size must not exceed 4MB');
-            e.target.value = '';
-            document.getElementById('fileName').textContent = 'Please make sure to include your CV (PDF only)';
-        }
-    }
-});
-
-// Form validation
-document.querySelector('.application-form').addEventListener('submit', function(e) {
-    const cvInput = document.getElementById('id_cv');
-    if (!cvInput.files.length) {
+    // Highlight selected wallet
+    paymentMethodInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            document.querySelectorAll('.wallet-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            this.closest('.wallet-card').classList.add('selected');
+        });
+    });
+    
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Please upload your CV');
-        return false;
-    }
+        
+        const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+        
+        if (!selectedMethod) {
+            alert('Please select a payment method');
+            return;
+        }
+        
+        // Generate transaction ID
+        const transactionId = selectedMethod.value.toUpperCase() + '_' + 
+                            Date.now() + '_' + 
+                            Math.random().toString(36).substr(2, 9);
+        
+        document.getElementById('transaction-id').value = transactionId;
+        
+        // In production, integrate with actual payment gateway here
+        // For now, simulate payment success
+        if (confirm(`Proceed with ${selectedMethod.value.toUpperCase()} payment of Rs. {{ discounted_price|floatformat:2 }}?`)) {
+            form.submit();
+        }
+    });
 });
 </script>
 {% endblock %}

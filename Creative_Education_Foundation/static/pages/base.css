@@ -698,3 +698,39 @@ ul {
         min-width: 240px;
     }
 }
+
+/* Make logout button look like a nav link */
+.logout-link {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    display: inline;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+/* If your nav links have specific styling, match it */
+nav a,
+nav .logout-link {
+    color: #333;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover,
+nav .logout-link:hover {
+    color: #5C2D91;
+}
+
+/* For inline form in navigation */
+nav form {
+    display: inline;
+    margin: 0;
+}

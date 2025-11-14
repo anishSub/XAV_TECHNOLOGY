@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}BBS 1ST YEAR ACCOUNTANCY - Creative Education Foundation{% endblock %}
+{% block title %}{{ course.title }} - Creative Education Foundation{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'pages/liveClasses/liveClassesExtensive.css' %}">
@@ -18,14 +18,14 @@
         <nav class="breadcrumb">
             <a href="{% url 'home' %}">Live Classes</a>
             <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">BBS 1ST YEAR ACCOUNTANCY (Tuition Classes)</span>
+            <span class="breadcrumb-current">{{ course.title }}</span>
         </nav>
-        <a href="{% url 'home' %}" class="home-icon">
+        {% comment %} <a href="{% url 'home' %}" class="home-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                 <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
-        </a>
+        </a> {% endcomment %}
     </div>
 </div>
 
@@ -36,22 +36,108 @@
             <div class="class-main-content">
                 <!-- Class Banner -->
                 <div class="class-banner">
-                    <img src="{% static 'img/1.png' %}" alt="BBS 1ST YEAR ACCOUNTANCY">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="{% static 'img/1.png' %}" alt="{{ course.title }}">
+                    {% endif %}
+                    
+                    {% if is_enrolled %}
+                        <div class="enrolled-banner-overlay">
+                            <span class="enrolled-banner-badge">✓ You are enrolled in this course</span>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Class Info -->
                 <div class="class-info-card">
-                    <h1 class="class-main-title">BBS 1ST YEAR ACCOUNTANCY</h1>
-                    <p class="class-price">Rs. 2000</p>
-                    <p class="class-validity">Valid for 23 days after enrollment</p>
+                    <h1 class="class-main-title">{{ course.title }}</h1>
                     
+                    {% if course.discount_percentage > 0 %}
+                        <div class="price-section">
+                            <span class="class-price-original">Rs. {{ course.price|floatformat:0 }}</span>
+                            <span class="class-price">Rs. {{ discounted_price|floatformat:0 }}</span>
+                            <span class="discount-badge-inline">{{ course.discount_percentage|floatformat:0 }}% OFF</span>
+                        </div>
+                    {% else %}
+                        <p class="class-price">Rs. {{ course.price|floatformat:0 }}</p>
+                    {% endif %}
+                    
+                    {% if course.duration %}
+                        <p class="class-validity">Duration: {{ course.duration }}</p>
+                    {% endif %}
+                    
+                    {% if course.instructor_name %}
                     <div class="instructor-info">
-                        <span class="instructor-label">Instructors:</span>
-                        <span class="instructor-name">Teacher</span>
+                        <span class="instructor-label">Instructor:</span>
+                        <span class="instructor-name">{{ course.instructor_name }}</span>
                     </div>
+                    {% endif %}
 
-                    <button class="enroll-btn" onclick="window.location.href='{% url 'enroll_now' %}'">Enroll Now</button>
+                    {% if is_enrolled %}
+                        <button class="enroll-btn enrolled-btn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Enrolled
+                        </button>
+                        <a href="{% url 'course_detail' pk=course.id %}" class="view-course-btn">
+                            View Course Details
+                        </a>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            <button class="enroll-btn" onclick="window.location.href='{% url 'enroll_now' course.id %}'">
+                                Enroll Now
+                            </button>
+                        {% else %}
+                            <button class="enroll-btn" onclick="window.location.href='{% url 'login' %}?next={% url 'enroll_course' course.id %}'">
+                                Login to Enroll
+                            </button>
+                        {% endif %}
+                    {% endif %}
                 </div>
+
+                <!-- Tabs Section -->{# ----------  RATING BLOCK  ---------- #}
+
+                {% if is_enrolled %}
+                <div class="rating-block">
+                    <h3>How was this course?</h3>
+
+                    {% if user_review %}
+                    {# -----  already reviewed  ----- #}
+                    <div class="user-review">
+                        <p><strong>Your review:</strong>
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= user_review.rating %}
+                            <span class="star filled">★</span>
+                            {% else %}
+                            <span class="star">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                        </p>
+                        {% if user_review.comment %}<p>{{ user_review.comment }}</p>{% endif %}
+                        <form method="post" action="{% url 'delete_course_review' course.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-link">Delete review</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    {# -----  first time  ----- #}
+                    <form method="post" action="{% url 'submit_course_review' course.id %}" class="star-form">
+                        {% csrf_token %}
+                        <div class="star-rating">
+                        {% for i in "54321" %}   {# reversed for correct hover direction #}
+                            <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" required>
+                            <label for="star{{ i }}" title="{{ i }} star">★</label>
+                        {% endfor %}
+                        </div>
+                        <textarea name="comment" placeholder="Optional comment…" rows="3"></textarea>
+                        <button type="submit" class="submit-review">Submit review</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
 
                 <!-- Description Tab -->
                 <div class="tabs-section">
@@ -60,7 +146,7 @@
                     </div>
                     <div class="tab-content">
                         <p class="description-text">
-                            This is our Accountancy live class. If you want to increase your grade or pass out your up coming exam then enroll into our Accountancy live class.
+                            {{ course.description|default:"This is a comprehensive course designed to help you excel in your studies." }}
                         </p>
                     </div>
                 </div>
@@ -71,7 +157,30 @@
                         <button class="tab-btn active">Reviews</button>
                     </div>
                     <div class="tab-content">
-                        <p class="no-reviews">No reviews yet. Be the first to review!</p>
+                        {% if course.reviews.all %}
+                            <div class="reviews-list">
+                                {% for review in course.reviews.all %}
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <strong>{{ review.user.get_full_name|default:review.user.username }}</strong>
+                                            <div class="rating">
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= review.rating %}
+                                                        <span class="star">⭐</span>
+                                                    {% else %}
+                                                        <span class="star empty">☆</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <p class="review-comment">{{ review.comment }}</p>
+                                        <p class="review-date">{{ review.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="no-reviews">No reviews yet. Be the first to review!</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -79,188 +188,88 @@
             <!-- Right Column - Schedule & Related Classes -->
             <div class="class-sidebar">
                 <!-- Weekly Schedule -->
+                {% if course.schedule_time or course.session_details %}
                 <div class="schedule-card">
-                    <h3 class="schedule-title">Weekly Schedule</h3>
+                    <h3 class="schedule-title">Class Schedule</h3>
                     
-                    <div class="schedule-days">
-                        <!-- Sunday -->
-                        <div class="day-item">
-                            <div class="day-header-simple">
-                                <span class="day-name">Sunday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>9:00 AM – 10:00 AM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Monday -->
-                        <div class="day-item">
-                            <div class="day-header-simple">
-                                <span class="day-name">Monday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>10:00 AM – 11:00 AM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tuesday -->
-                        <div class="day-item">
-                            <div class="day-header-simple">
-                                <span class="day-name">Tuesday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>11:00 AM – 12:00 PM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Wednesday -->
-                        <div class="day-item">
-                            <div class="day-header-simple">
-                                <span class="day-name">Wednesday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>1:00 PM – 2:00 PM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Thursday (Active by default, no box/border, no "Class Finished") -->
-                        <div class="day-item active">
-                            <div class="day-header-simple">
-                                <span class="day-name">Thursday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>10:00 AM – 11:00 AM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Friday -->
-                        <div class="day-item">
-                            <div class="day-header-simple">
-                                <span class="day-name">Friday</span>
-                                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </div>
-                            <div class="day-content">
-                                <div class="time-slot">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <polyline points="12 6 12 12 16 14"/>
-                                    </svg>
-                                    <span>3:00 PM – 4:00 PM</span>
-                                </div>
-                            </div>
+                    {% if course.schedule_time %}
+                    <div class="schedule-info">
+                        <div class="schedule-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>{{ course.schedule_time }}</span>
                         </div>
                     </div>
+                    {% endif %}
+                    
+                    {% if course.session_details %}
+                    <div class="schedule-info">
+                        <div class="schedule-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span>{{ course.session_details }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
 
+                    {% if is_enrolled %}
                     <button class="join-class-btn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
                         Join Live Class
                     </button>
+                    {% else %}
+                    <button class="join-class-btn disabled" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        Enroll to Join Class
+                    </button>
+                    {% endif %}
                 </div>
+                {% endif %}
 
                 <!-- Related Classes -->
+                <!-- Related Classes -->
                 <div class="related-classes">
-                    <!-- Class 1 -->
-                    <a href="{% url 'online_class_extra1' %}" class="related-class-card">
-                        <div class="related-class-image">
-                            <img src="{% static 'img/2.png' %}" alt="BBS 1ST YEAR BUSINESS MATH">
-                        </div>
-                        <div class="related-class-content">
-                            <div class="rating">
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                            </div>
-                            <h4 class="related-class-title">BBS 1ST YEAR BUSINESS MATH</h4>
-                            <p class="related-class-price">Rs. 2,000</p>
-                        </div>
-                    </a>
+                <h3 class="related-title">Related Courses</h3>
 
-                    <!-- Class 2 -->
-                    <a href="{% url 'online_class_extra1' %}" class="related-class-card">
-                        <div class="related-class-image">
-                            <img src="{% static 'img/3.png' %}" alt="English & Social Grade Increment Live Class">
-                        </div>
-                        <div class="related-class-content">
+                {% for rc in related_courses %}
+                    <a href="{% url 'online_class_extra' rc.id %}" class="related-class-card">
+                    <div class="related-class-image">
+                        <img src="{{ rc.image.url|default_if_none:'/static/img/placeholder.png' }}" alt="{{ rc.title }}">
+                    </div>
+                    <div class="related-class-content">
+                        {#  dynamic stars  #}
+                        {% with avg=rc.get_average_rating|floatformat:1 %}
+                        {% if avg|add:0 %}
                             <div class="rating">
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avg|add:0 %}
+                                <span class="star filled">★</span>
+                                {% else %}
+                                <span class="star">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                            <small>({{ avg }})</small>
                             </div>
-                            <h4 class="related-class-title">English & Social Grade Increment Live Class</h4>
-                            <p class="related-class-price">Rs. 2,000</p>
-                        </div>
-                    </a>
+                        {% endif %}
+                        {% endwith %}
 
-                    <!-- Class 3 -->
-                    <a href="{% url 'online_class_extra1' %}" class="related-class-card">
-                        <div class="related-class-image">
-                            <img src="{% static 'img/4.png' %}" alt="Account Grade Increment Live Class">
-                        </div>
-                        <div class="related-class-content">
-                            <div class="rating">
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                                <span class="star">⭐</span>
-                            </div>
-                            <h4 class="related-class-title">Account Grade Increment Live Class</h4>
-                            <p class="related-class-price">Rs. 2,000</p>
-                        </div>
+                        <h4 class="related-class-title">{{ rc.title }}</h4>
+                        <p class="related-class-price">Rs. {{ rc.get_discounted_price|floatformat:0 }}</p>
+                    </div>
                     </a>
+                {% empty %}
+                    <p class="no-related">No related courses found.</p>
+                {% endfor %}
                 </div>
             </div>
         </div>

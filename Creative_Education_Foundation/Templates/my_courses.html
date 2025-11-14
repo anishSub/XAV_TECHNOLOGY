@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Courses - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/profile.css' %}">  <!-- Reuse the same CSS if it fits -->
+{% endblock %}
+
+{% block content %}
+<div class="enrolled-courses">
+    <h3>My Enrolled Courses</h3>
+    
+    {% if enrollments %}
+        <div class="course-grid">
+            {% for enrollment in enrollments %}
+            <div class="enrolled-course-card">
+                {% if enrollment.course.image %}
+                <div class="course-image-container">
+                    <img src="{{ enrollment.course.image.url }}" alt="{{ enrollment.course.title }}">
+                </div>
+                {% else %}
+                <div class="course-image-container">
+                    <img src="{% static 'img/logo.png' %}" alt="{{ enrollment.course.title }}">
+                </div>
+                {% endif %}
+                
+                <div class="course-info">
+                    <h4 class="course-title">{{ enrollment.course.title }}</h4>
+                    
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <strong>Enrolled:</strong> {{ enrollment.enrolled_at|date:"M d, Y" }}
+                        </div>
+                        <div class="meta-item">
+                            <strong>Amount Paid:</strong> Rs. {{ enrollment.amount_paid }}
+                        </div>
+                        <div class="meta-item">
+                            <strong>Access Status:</strong>
+                            {% if enrollment.has_access %}
+                                <span class="access-badge active">Active</span>
+                            {% else %}
+                                <span class="access-badge expired">Expired</span>
+                            {% endif %}
+                        </div>
+                        {% if enrollment.access_expiry %}
+                        <div class="meta-item">
+                            <strong>Valid Until:</strong> {{ enrollment.access_expiry|date:"M d, Y" }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if enrollment.has_access %}
+                        <a href="{% url 'course_detail' enrollment.course.id %}" class="btn-access-course">
+                            Access Course
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-courses">
+            <p>You haven't enrolled in any courses yet.</p>
+            <a href="{% url 'online_classes' %}" class="btn-browse-courses">Browse Courses</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Enrollment Successful – Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/liveClasses/enroll_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" fill="none">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </div>
+
+  <h1>Enrollment Successful!</h1>
+  <p class="success-message">
+    You have successfully enrolled in <strong>{{ enrollment.course.title }}</strong>
+  </p>
+
+  <!-- 1.  Details  -->
+  <div class="enrollment-details">
+    <h3>Enrollment Details</h3>
+
+    <div class="detail-row">
+      <span class="detail-label">Course Name:</span>
+      <span class="detail-value">{{ enrollment.course.title }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Enrollment ID:</span>
+      <span class="detail-value">#{{ enrollment.id }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Amount Paid:</span>
+      <span class="detail-value">Rs. {{ enrollment.amount_paid }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Payment Method:</span>
+      <span class="detail-value">{{ enrollment.get_payment_method_display }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Transaction ID:</span>
+      <span class="detail-value">{{ enrollment.transaction_id|default:"—" }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Enrollment Date:</span>
+      <span class="detail-value">{{ enrollment.enrolled_at|date:"F d, Y" }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">Access Valid Until:</span>
+      <span class="detail-value">{{ enrollment.access_expiry|date:"F d, Y" }}</span>
+    </div>
+  </div>
+
+  {% if enrollment.payment_status != 'completed' %}
+  <!-- 2.  Retry payment (optional)  -->
+  <div class="retry-payment">
+    <p>Payment was not completed.  Please choose a wallet to finalise your seat.</p>
+    <form method="post" action="{% url 'confirm_enrollment_payment' enrollment.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="payment_method" value="khalti">
+      <button type="submit" class="btn-pay khalti">Retry with Khalti</button>
+    </form>
+    <form method="post" action="{% url 'confirm_enrollment_payment' enrollment.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="payment_method" value="esewa">
+      <button type="submit" class="btn-pay esewa">Retry with eSewa</button>
+    </form>
+  </div>
+  {% endif %}
+
+  <!-- 3.  Next steps  -->
+  <div class="next-steps">
+    <h4>What's Next?</h4>
+    <ul>
+      <li>Access your course anytime from your profile</li>
+      <li>Join live classes as per schedule</li>
+      <li>Download course materials and resources</li>
+      <li>Track your progress and complete assignments</li>
+    </ul>
+  </div>
+
+  <!-- 4.  Action buttons  -->
+  <div class="action-buttons">
+    <a href="{% url 'course_detail' enrollment.course.id %}" class="btn btn-primary">Go to Course</a>
+    <a href="{% url 'profile' %}" class="btn btn-secondary">View Profile</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /* small UX improvement – scroll icon into view */
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.success-icon').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+</script>
+{% endblock %}

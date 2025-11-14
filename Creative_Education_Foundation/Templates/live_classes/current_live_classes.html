@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Live Classes - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/liveClasses/liveClass.css' %}">
+<style>
+    .class-status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .status-live-now {
+        background: #ff4444;
+        color: white;
+        animation: pulse 2s infinite;
+    }
+    
+    .status-starting-soon {
+        background: #ff9800;
+        color: white;
+    }
+    
+    .status-today {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    .status-upcoming {
+        background: #2196F3;
+        color: white;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+    
+    .live-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #ff4444;
+        border-radius: 50%;
+        margin-right: 5px;
+        animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+        0%, 50%, 100% { opacity: 1; }
+        25%, 75% { opacity: 0.3; }
+    }
+    
+    .countdown-timer {
+        font-size: 14px;
+        color: #ff9800;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    
+    .next-class-info {
+        font-size: 13px;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    .join-class-btn {
+        display: inline-block;
+        background: #ff4444;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: background 0.3s;
+    }
+    
+    .join-class-btn:hover {
+        background: #cc0000;
+    }
+    
+    .enrolled-badge {
+        background: #4CAF50;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+<script>
+    // Auto-refresh page every 60 seconds to update class statuses
+    setTimeout(function() {
+        location.reload();
+    }, 60000);
+    
+    // Countdown timer for starting soon classes
+    function updateCountdowns() {
+        const countdowns = document.querySelectorAll('[data-minutes]');
+        countdowns.forEach(el => {
+            let minutes = parseInt(el.dataset.minutes);
+            if (minutes > 0) {
+                setInterval(() => {
+                    minutes--;
+                    if (minutes <= 0) {
+                        location.reload();
+                    } else {
+                        el.textContent = `Starts in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                    }
+                }, 60000);
+            }
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', updateCountdowns);
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Live Classes Section -->
+<section class="live-classes-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Live Classes</h2>
+            <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                Current time: {{ current_time|date:"g:i A, l" }}
+            </p>
+        </div>
+
+        <!-- Live Now Section -->
+        {% if live_now %}
+        <div class="section-category">
+            <h3 style="color: #ff4444; margin-bottom: 20px;">
+                <span class="live-indicator"></span> LIVE NOW
+            </h3>
+            <div class="live-classes-grid">
+                {% for course in live_now %}
+                <div class="live-class-card {% if course.is_user_enrolled %}enrolled-card{% endif %}">
+                    <span class="class-status-badge status-live-now">
+                        🔴 LIVE NOW
+                    </span>
+                    
+                    <a href="{% url 'course_detail' pk=course.id %}" style="text-decoration: none; color: inherit;">
+                        <div class="live-class-image">
+                            {% if course.image %}
+                                <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{% static 'img/default-course.png' %}" alt="{{ course.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="live-class-content">
+                            <!-- Dynamic Rating Display -->
+                            <div class="rating">
+                                {% with avg_rating=course.get_average_rating %}
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= avg_rating %}
+                                            <span class="star filled">⭐</span>
+                                        {% else %}
+                                            <span class="star empty">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rating-text">({{ avg_rating|floatformat:1 }})</span>
+                                {% endwith %}
+                                {% if course.is_user_enrolled %}
+                                    <span class="enrolled-badge">✓ Enrolled</span>
+                                {% endif %}
+                            </div>
+                            
+                            <h3 class="live-class-title">{{ course.title }}</h3>
+                            
+                            <!-- Price with Discount -->
+                            <div class="live-class-price">
+                                {% if course.discount_percentage > 0 %}
+                                    <span class="original-price">Rs. {{ course.price|floatformat:0 }}</span>
+                                    <span class="discounted-price">Rs. {{ course.get_discounted_price|floatformat:0 }}</span>
+                                    <span class="discount-badge">{{ course.discount_percentage|floatformat:0 }}% OFF</span>
+                                {% else %}
+                                    <span class="price">Rs. {{ course.price|floatformat:0 }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Schedule -->
+                            <div class="live-class-schedule">
+                                {% if course.schedule_time %}
+                                <div class="schedule-row">
+                                    <span class="schedule-label">Time:</span>
+                                    <span class="schedule-time">{{ course.schedule_time }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if course.instructor_name %}
+                                <div class="schedule-row">
+                                    <span class="schedule-label">Instructor:</span>
+                                    <span class="schedule-time">{{ course.instructor_name }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    
+                    {% if course.is_user_enrolled and course.meeting_link %}
+                        <a href="{{ course.meeting_link }}" target="_blank" class="join-class-btn">
+                            Join Class Now →
+                        </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Starting Soon Section -->
+        {% if starting_soon %}
+        <div class="section-category" style="margin-top: 40px;">
+            <h3 style="color: #ff9800; margin-bottom: 20px;">⏰ Starting Soon</h3>
+            <div class="live-classes-grid">
+                {% for course in starting_soon %}
+                <div class="live-class-card {% if course.is_user_enrolled %}enrolled-card{% endif %}">
+                    <span class="class-status-badge status-starting-soon">
+                        ⏰ Starting in {{ course.minutes_left }} min
+                    </span>
+                    
+                    <a href="{% url 'course_detail' pk=course.id %}" style="text-decoration: none; color: inherit;">
+                        <div class="live-class-image">
+                            {% if course.image %}
+                                <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{% static 'img/default-course.png' %}" alt="{{ course.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="live-class-content">
+                            <div class="rating">
+                                {% with avg_rating=course.get_average_rating %}
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= avg_rating %}
+                                            <span class="star filled">⭐</span>
+                                        {% else %}
+                                            <span class="star empty">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rating-text">({{ avg_rating|floatformat:1 }})</span>
+                                {% endwith %}
+                                {% if course.is_user_enrolled %}
+                                    <span class="enrolled-badge">✓ Enrolled</span>
+                                {% endif %}
+                            </div>
+                            
+                            <h3 class="live-class-title">{{ course.title }}</h3>
+                            
+                            <div class="countdown-timer" data-minutes="{{ course.minutes_left }}">
+                                Starts in {{ course.minutes_left }} minute{{ course.minutes_left|pluralize }}
+                            </div>
+                            
+                            <div class="live-class-price">
+                                {% if course.discount_percentage > 0 %}
+                                    <span class="original-price">Rs. {{ course.price|floatformat:0 }}</span>
+                                    <span class="discounted-price">Rs. {{ course.get_discounted_price|floatformat:0 }}</span>
+                                    <span class="discount-badge">{{ course.discount_percentage|floatformat:0 }}% OFF</span>
+                                {% else %}
+                                    <span class="price">Rs. {{ course.price|floatformat:0 }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="live-class-schedule">
+                                {% if course.instructor_name %}
+                                <div class="schedule-row">
+                                    <span class="schedule-label">Instructor:</span>
+                                    <span class="schedule-time">{{ course.instructor_name }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- All Live Classes -->
+        <div class="section-category" style="margin-top: 40px;">
+            <h3 style="margin-bottom: 20px;">📅 All Live Classes</h3>
+            <div class="live-classes-grid">
+                {% for course in courses %}
+                {% if course not in live_now and course not in starting_soon %}
+                <a href="{% url 'course_detail' pk=course.id %}" class="live-class-card">
+                    {% if course in today_classes %}
+                        <span class="class-status-badge status-today">Today's Class</span>
+                    {% else %}
+                        <span class="class-status-badge status-upcoming">Upcoming</span>
+                    {% endif %}
+                    
+                    <div class="live-class-image">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                        {% else %}
+                            <img src="{% static 'img/default-course.png' %}" alt="{{ course.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="live-class-content">
+                        <div class="rating">
+                            {% with avg_rating=course.get_average_rating %}
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= avg_rating %}
+                                        <span class="star filled">⭐</span>
+                                    {% else %}
+                                        <span class="star empty">☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="rating-text">({{ avg_rating|floatformat:1 }})</span>
+                            {% endwith %}
+                            {% if course.is_user_enrolled %}
+                                <span class="enrolled-badge">✓ Enrolled</span>
+                            {% endif %}
+                        </div>
+                        
+                        <h3 class="live-class-title">{{ course.title }}</h3>
+                        
+                        <div class="live-class-price">
+                            {% if course.discount_percentage > 0 %}
+                                <span class="original-price">Rs. {{ course.price|floatformat:0 }}</span>
+                                <span class="discounted-price">Rs. {{ course.get_discounted_price|floatformat:0 }}</span>
+                                <span class="discount-badge">{{ course.discount_percentage|floatformat:0 }}% OFF</span>
+                            {% else %}
+                                <span class="price">Rs. {{ course.price|floatformat:0 }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="live-class-schedule">
+                            {% if course.schedule_time %}
+                            <div class="schedule-row">
+                                <span class="schedule-label">Schedule:</span>
+                                <span class="schedule-time">{{ course.schedule_time }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if course.instructor_name %}
+                            <div class="schedule-row">
+                                <span class="schedule-label">Instructor:</span>
+                                <span class="schedule-time">{{ course.instructor_name }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if course.session_details %}
+                            <div class="schedule-row">
+                                <span class="schedule-label">Days:</span>
+                                <span class="schedule-time">{{ course.session_details }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if course.get_next_class_datetime %}
+                        <div class="next-class-info">
+                            Next class: {{ course.get_next_class_datetime|date:"D, M d 'at' g:i A" }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endif %}
+                {% empty %}
+                <div class="no-courses">
+                    <p>No live classes available at the moment. Check back soon!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if courses %}
+    <a href="{% url 'all_courses' %}" class="view-more">
+        View All Courses
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m12 16 4-4-4-4M8 12h8"/>
+        </svg>
+    </a>
+    {% endif %}
+</section>
+{% endblock %}

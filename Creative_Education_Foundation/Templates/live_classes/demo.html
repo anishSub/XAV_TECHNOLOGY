@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Online Classes - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/liveClasses/liveClass.css' %}">
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Online Classes Section -->
+<section class="live-classes-section">
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Online Classes</h2>
+            {% if total_courses %}
+            <p class="courses-count">{{ total_courses }} course{{ total_courses|pluralize }} available</p>
+            {% endif %}
+        </div>
+
+        <div class="live-classes-grid">
+            {% for course in courses %}
+            <!-- Course Card -->
+            <a href="{% url 'course_detail' pk=course.id %}" class="live-class-card">
+                <!-- Course Type Badge -->
+                <span class="course-type-badge badge-{{ course.course_type }}">
+                    {% if course.course_type == 'live' %}
+                        🔴 Live Class
+                    {% elif course.course_type == 'recorded' %}
+                        📹 Recorded Course
+                    {% elif course.course_type == 'hybrid' %}
+                        🔄 Hybrid
+                    {% endif %}
+                </span>
+                
+                <div class="live-class-image">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="{% static 'img/default-course.png' %}" alt="{{ course.title }}">
+                    {% endif %}
+                </div>
+                
+                <div class="live-class-content">
+                    <!-- Dynamic Rating Display -->
+                    <div class="rating">
+                        {% with avg_rating=course.get_average_rating %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avg_rating %}
+                                    <span class="star filled">⭐</span>
+                                {% else %}
+                                    <span class="star empty">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="rating-text">({{ avg_rating|floatformat:1 }})</span>
+                            
+                            {% if course.is_user_enrolled %}
+                                <span class="enrolled-badge">✓ Enrolled</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    
+                    <h3 class="live-class-title">{{ course.title }}</h3>
+                    
+                    <!-- Price with Discount -->
+                    <div class="live-class-price">
+                        {% if course.discount_percentage > 0 %}
+                            <span class="original-price">Rs. {{ course.price|floatformat:0 }}</span>
+                            <span class="discounted-price">Rs. {{ course.get_discounted_price|floatformat:0 }}</span>
+                            <span class="discount-badge">{{ course.discount_percentage|floatformat:0 }}% OFF</span>
+                        {% else %}
+                            <span class="price">Rs. {{ course.price|floatformat:0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Schedule (for live and hybrid classes) -->
+                    {% if course.course_type == 'live' or course.course_type == 'hybrid' %}
+                    <div class="live-class-schedule">
+                        {% if course.schedule_time %}
+                        <div class="schedule-row">
+                            <span class="schedule-label">Schedule:</span>
+                            <span class="schedule-time">{{ course.schedule_time }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if course.session_details %}
+                        <div class="schedule-row">
+                            <span class="schedule-label">Days:</span>
+                            <span class="schedule-time">{{ course.session_details }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Duration (for all courses) -->
+                    {% if course.duration %}
+                    <div class="live-class-schedule">
+                        <div class="schedule-row">
+                            <span class="schedule-label">Duration:</span>
+                            <span class="schedule-time">{{ course.duration }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Instructor Info -->
+                    {% if course.instructor_name %}
+                    <div class="instructor-info">
+                        <span class="instructor-label">Instructor:</span>
+                        <span class="instructor-name">{{ course.instructor_name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+            {% empty %}
+            <div class="no-courses">
+                <p>No courses available at the moment. Please check back later!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if courses %}
+    <a href="{% url 'all_courses' %}" class="view-more">
+        View All Courses
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m12 16 4-4-4-4M8 12h8"/>
+        </svg>
+    </a>
+    {% endif %}
+</section>
+{% endblock %}

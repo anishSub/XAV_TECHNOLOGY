@@ -1,0 +1,221 @@
+/* Live Classes Section */
+.live-classes-section {
+    padding: 60px 20px;
+    background: #f8f9fa;
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 36px;
+    color: #333;
+    font-weight: 700;
+}
+
+/* Grid Layout */
+.live-classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Card Styles */
+.live-class-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.live-class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.live-class-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.live-class-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.live-class-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Rating */
+.rating {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.star {
+    color: #ffc107;
+}
+
+/* Title */
+.live-class-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    min-height: 50px;
+}
+
+/* Price */
+.live-class-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5C2D91;
+    margin-bottom: 15px;
+}
+
+/* Discount Pricing */
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.discounted-price {
+    color: #5C2D91;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.discount-badge {
+    display: inline-block;
+    background: #ff4444;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+/* Schedule */
+.live-class-schedule {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.schedule-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.schedule-row:last-child {
+    margin-bottom: 0;
+}
+
+.schedule-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.schedule-time {
+    color: #333;
+    font-weight: 600;
+}
+
+/* View More Button */
+.view-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 200px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    background: #5C2D91;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-more:hover {
+    background: #7C3DAD;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(92, 45, 145, 0.3);
+}
+
+.view-more svg {
+    transition: transform 0.3s ease;
+}
+
+.view-more:hover svg {
+    transform: translateX(4px);
+}
+
+/* No Courses Message */
+.no-courses {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-courses p {
+    font-size: 18px;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-header h2 {
+        font-size: 28px;
+    }
+    
+    .live-classes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .live-class-title {
+        font-size: 16px;
+        min-height: auto;
+    }
+    
+    .live-class-price {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .live-classes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .live-classes-section {
+        padding: 40px 15px;
+    }
+}

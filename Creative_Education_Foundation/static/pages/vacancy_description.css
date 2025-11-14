@@ -1,0 +1,141 @@
+
+.course-detail-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.course-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.course-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.course-meta {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.meta-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.course-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.course-main {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.course-sidebar {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.price-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 18px;
+}
+
+.current-price {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 10px 0;
+}
+
+.discount-badge {
+    background: #10b981;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-enroll {
+    width: 100%;
+    padding: 15px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.btn-enroll:hover {
+    background: #2563eb;
+}
+
+.btn-enrolled {
+    background: #10b981;
+    cursor: not-allowed;
+}
+
+.course-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.course-info-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+.course-description {
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+@media (max-width: 768px) {
+    .course-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .course-sidebar {
+        position: static;
+    }
+}

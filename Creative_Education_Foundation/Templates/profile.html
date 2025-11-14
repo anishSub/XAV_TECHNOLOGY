@@ -1,40 +1,39 @@
+        {% extends "base.html" %}
+        {% load static %}
 
-{% extends "base.html" %}
-{% load static %}
+        {% block title %}User Profile – Creative Education Foundation{% endblock %}
 
-{% block title %}User Profile - Creative Education Foundation{% endblock %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'pages/profile.css' %}">
-{% endblock %}
+        {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'pages/profile.css' %}">
 
+        {% endblock %}
 
 {% block content %}
-
-<div class="profile-container">
-    <div class="profile-header">
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <div class="profile-avatar">👤</div>
         <h2>User Profile</h2>
-    </div>
-    
-    <div class="profile-info">
-        <div class="info-item">
-            <span class="info-label">Name:</span>
-            <span class="info-value">{{ user.first_name }} {{ user.last_name }}</span>
-        </div>
-        
-        <div class="info-item">
-            <span class="info-label">Username:</span>
-            <span class="info-value">{{ user.username }}</span>
-        </div>
-        
-        <div class="info-item">
-            <span class="info-label">Email:</span>
-            <span class="info-value">{{ user.email }}</span>
-        </div>
-        
-        <div class="info-item">
-            <span class="info-label">Mobile:</span>
-            <span class="info-value">{{ user.profile.mobile_number }}</span>
-        </div>
+
+        <table class="profile-table">
+            <tr>
+                <td class="label">Name</td>
+                <td class="value">{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td class="label">Username</td>
+                <td class="value">{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td class="label">Email</td>
+                <td class="value">{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td class="label">Mobile</td>
+                <td class="value">{{ profile.mobile_number|default:"Not provided" }}</td>
+            </tr>
+        </table>
+
+        <a href="#" class="btn-edit">Edit Profile</a>
     </div>
 </div>
 {% endblock %}

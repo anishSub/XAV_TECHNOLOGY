@@ -1,60 +1,83 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Enroll Now - Creative Education Foundation{% endblock %}
+{% block title %}Complete payment – {{ course.title }} | CEF{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'pages/liveClasses/enroll_now.css' %}">
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/enroll_now.js' %}"></script>
+<link rel="stylesheet" href="{% static 'pages/liveClasses/payment_initiate.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="payment-container">
-    <div class="payment-section">
-        <h1>Payment details:</h1>
-
-        <h2>Order Summary:</h2>
-
-        <table class="order-summary-table">
-            <tbody>
-                <tr>
-                    <th>Live Class Name</th>
-                    <td id="class-name">BBS 1ST YEAR ACCOUNTANCY</td>
-                </tr>
-                <tr>
-                    <th>Product ID</th>
-                    <td id="product-id">4</td>
-                </tr>
-                <tr>
-                    <th>Price</th>
-                    <td id="price">2000</td>
-                </tr>
-                <tr>
-                    <th>Discount</th>
-                    <td id="discount">0</td>
-                </tr>
-                <tr class="total-row">
-                    <th>Total</th>
-                    <td id="total">2000</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Select Payment Wallet:</h2>
-
-        <div class="wallet-options">
-            <div class="wallet-card" data-wallet="esewa">
-                <img src="{% static 'img/esewa.png' %}" alt="eSewa">
-            </div>
-            <div class="wallet-card" data-wallet="khalti">
-                <img src="{% static 'img/khalti.png' %}" alt="Khalti">
-            </div>
-        </div>
-
-        <button class="proceed-btn" id="proceed-btn" disabled>Proceed to Payment</button>
+  <div class="payment-header">
+    <div class="payment-icon">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
     </div>
+    <h1>Complete your payment</h1>
+    <p>Secure your seat for <strong>{{ course.title }}</strong></p>
+  </div>
+
+  <!-- 1  –  details  -->
+  <div class="payment-details">
+    <div class="detail-row">
+      <span class="detail-label">Course:</span>
+      <span class="detail-value">{{ course.title }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Applicant:</span>
+      <span class="detail-value">{{ user.get_full_name|default:user.username }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Enrollment ID:</span>
+      <span class="detail-value">#{{ enrollment.id }}</span>
+    </div>
+
+    {% if discount > 0 %}
+    <div class="detail-row">
+      <span class="detail-label">Original price:</span>
+      <span class="detail-value"><s>Rs. {{ course.price }}</s></span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Discount:</span>
+      <span class="detail-value">Rs. {{ discount }}</span>
+    </div>
+    {% endif %}
+
+    <div class="detail-row total">
+      <span class="detail-label">Amount to pay:</span>
+      <span class="detail-value">Rs. {{ discounted_price }}</span>
+    </div>
+  </div>
+
+
+  
+  <!-- 2  –  choose wallet  -->
+  <div class="wallet-buttons">
+    <form method="post" action="{% url 'confirm_enrollment_payment' enrollment.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="payment_method" value="khalti">
+      <button type="submit" class="btn-pay khalti">
+        <img src="{% static 'img/khalti.png' %}" alt="Khalti">  Pay with Khalti
+      </button>
+    </form>
+
+    <form method="post" action="{% url 'confirm_enrollment_payment' enrollment.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="payment_method" value="esewa">
+      <button type="submit" class="btn-pay esewa">
+        <img src="{% static 'img/esewa.png' %}" alt="eSewa">  Pay with eSewa
+      </button>
+    </form>
+  </div>
+
+  <a href="{% url 'course_detail' course.id %}" class="btn-cancel">←  Back to course</a>
+
+  <div class="payment-note">
+    You will be redirected to the chosen payment gateway.  
+    After successful payment your seat will be confirmed instantly.
+  </div>
 </div>
 {% endblock %}

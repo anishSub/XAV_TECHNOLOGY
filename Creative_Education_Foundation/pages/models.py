@@ -4,11 +4,32 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
+
+# models.py
+class Question(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    question = models.TextField()
+    suggestions = models.TextField(blank=True, null=True)
+    answered = models.BooleanField(default=False)
+    answer = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Question by {self.name}"
+
+
+
+
 def validate_cv_size(file):
     """Validate CV file size (max 4MB)"""
     max_size = 4 * 1024 * 1024  # 4 MB
     if file.size > max_size:
         raise ValidationError("File size must be under 4 MB.")
+
+
+
 
 
 class Vacancy(models.Model):

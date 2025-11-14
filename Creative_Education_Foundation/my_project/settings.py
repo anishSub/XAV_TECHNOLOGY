@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'courses.context_processors.user_enrollment_status',
                 
             ],
         },
@@ -173,3 +174,5 @@ VACANCY_APPLICATION_FEE = 100.00  # Rs. 100
 
 # Add 'requests' to your requirements.txt
 # requests>=2.31.0
+
+# TIME_ZONE = 'Asia/Kathmandu'

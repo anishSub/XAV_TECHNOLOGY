@@ -3,9 +3,18 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from .models import Vacancy, VacancyApplication, PaymentLog
-from courses.models import CoursePaymentLog, CourseEnrollment, UserProfile, Course
+from courses.models import CoursePaymentLog, CourseEnrollment, Course
+from accounts.models import UserProfile
+from .models import Question
 
 
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'question', 'answered', 'created_at']
+    list_filter = ['answered', 'created_at']
+    search_fields = ['name', 'email', 'question']
+    readonly_fields = ['created_at', 'updated_at']
 
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
@@ -37,7 +46,7 @@ class VacancyAdmin(admin.ModelAdmin):
     
     def applications_count(self, obj):
         count = obj.applications.count()
-        url = reverse('admin:your_app_vacancyapplication_changelist') + f'?vacancy__id__exact={obj.id}'
+        url = reverse('admin:pages_vacancyapplication_changelist') + f'?vacancy__id__exact={obj.id}'
         return format_html('<a href="{}">{} applications</a>', url, count)
     applications_count.short_description = 'Applications'
     
@@ -88,7 +97,7 @@ class VacancyApplicationAdmin(admin.ModelAdmin):
         }),
         ('Payment Information', {
             'fields': ('payment_status', 'payment_amount', 'khalti_transaction_id', 
-                      'khalti_payment_token', 'payment_date')
+                'khalti_payment_token', 'payment_date')
         }),
         ('Timestamps', {
             'fields': ('applied_at', 'updated_at'),
@@ -170,157 +179,3 @@ class PaymentLogAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
     
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'course_type', 'price', 'discount_percentage', 
-                    'get_discounted_price', 'is_active', 'enrollment_count']
-    list_filter = ['course_type', 'is_active', 'created_at']
-    search_fields = ['title', 'description', 'instructor_name']
-    readonly_fields = ['created_at', 'updated_at']
-    
-    fieldsets = (
-        ('Basic Information', {
-            'fields': ('title', 'description', 'image', 'course_type')
-        }),
-        ('Pricing', {
-            'fields': ('price', 'discount_percentage')
-        }),
-        ('Schedule', {
-            'fields': ('schedule_time', 'session_details', 'duration')
-        }),
-        ('Instructor', {
-            'fields': ('instructor_name', 'rating')
-        }),
-        ('Status', {
-            'fields': ('is_active',)
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def enrollment_count(self, obj):
-        count = obj.enrollments.filter(payment_status='completed').count()
-        return format_html('<strong>{}</strong> students', count)
-    enrollment_count.short_description = 'Enrollments'
-    
-    actions = ['activate_courses', 'deactivate_courses']
-    
-    def activate_courses(self, request, queryset):
-        updated = queryset.update(is_active=True)
-        self.message_user(request, f'{updated} courses activated.')
-    activate_courses.short_description = 'Activate selected courses'
-    
-    def deactivate_courses(self, request, queryset):
-        updated = queryset.update(is_active=False)
-        self.message_user(request, f'{updated} courses deactivated.')
-    deactivate_courses.short_description = 'Deactivate selected courses'
-
-
-class CoursePaymentLogInline(admin.TabularInline):
-    model = CoursePaymentLog
-    extra = 0
-    readonly_fields = ['transaction_id', 'amount', 'payment_method', 'status', 'created_at']
-    can_delete = False
-    
-    def has_add_permission(self, request, obj=None):
-        return False
-
-
-@admin.register(CourseEnrollment)
-class CourseEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ['user_name', 'course_name', 'amount_paid', 'payment_status', 
-                    'payment_method', 'enrolled_at', 'access_status']
-    list_filter = ['payment_status', 'payment_method', 'is_active', 'enrolled_at']
-    search_fields = ['user__username', 'user__email', 'course__title', 'transaction_id']
-    readonly_fields = ['user', 'course', 'amount_paid', 'transaction_id', 
-                       'enrolled_at', 'payment_date']
-    date_hierarchy = 'enrolled_at'
-    inlines = [CoursePaymentLogInline]
-    
-    fieldsets = (
-        ('Enrollment Details', {
-            'fields': ('user', 'course', 'enrolled_at')
-        }),
-        ('Payment Information', {
-            'fields': ('payment_status', 'payment_method', 'amount_paid', 
-                      'transaction_id', 'payment_date')
-        }),
-        ('Access Control', {
-            'fields': ('is_active', 'access_expiry')
-        }),
-    )
-    
-    def user_name(self, obj):
-        return obj.user.get_full_name() or obj.user.username
-    user_name.short_description = 'Student'
-    user_name.admin_order_field = 'user__username'
-    
-    def course_name(self, obj):
-        return obj.course.title
-    course_name.short_description = 'Course'
-    course_name.admin_order_field = 'course__title'
-    
-    def access_status(self, obj):
-        if obj.has_access():
-            return format_html(
-                '<span style="color: green; font-weight: bold;">✓ Active</span>'
-            )
-        return format_html(
-            '<span style="color: red; font-weight: bold;">✗ Expired</span>'
-        )
-    access_status.short_description = 'Access'
-    
-    actions = ['mark_completed', 'mark_active', 'mark_inactive']
-    
-    def mark_completed(self, request, queryset):
-        updated = queryset.update(payment_status='completed')
-        self.message_user(request, f'{updated} enrollments marked as completed.')
-    mark_completed.short_description = 'Mark payment as completed'
-    
-    def mark_active(self, request, queryset):
-        updated = queryset.update(is_active=True)
-        self.message_user(request, f'{updated} enrollments activated.')
-    mark_active.short_description = 'Activate enrollments'
-    
-    def mark_inactive(self, request, queryset):
-        updated = queryset.update(is_active=False)
-        self.message_user(request, f'{updated} enrollments deactivated.')
-    mark_inactive.short_description = 'Deactivate enrollments'
-
-
-@admin.register(CoursePaymentLog)
-class CoursePaymentLogAdmin(admin.ModelAdmin):
-    list_display = ['transaction_id', 'enrollment_user', 'amount', 'payment_method', 
-                    'status', 'created_at']
-    list_filter = ['payment_method', 'status', 'created_at']
-    search_fields = ['transaction_id', 'enrollment__user__username']
-    readonly_fields = ['enrollment', 'transaction_id', 'amount', 'payment_method', 
-                       'status', 'response_data', 'created_at']
-    date_hierarchy = 'created_at'
-    
-    def enrollment_user(self, obj):
-        return obj.enrollment.user.username
-    enrollment_user.short_description = 'User'
-    
-    def has_add_permission(self, request):
-        return False
-    
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'mobile_number', 'enrolled_courses_count']
-    search_fields = ['user__username', 'user__email', 'mobile_number']
-    readonly_fields = ['user']
-    
-    def enrolled_courses_count(self, obj):
-        count = CourseEnrollment.objects.filter(
-            user=obj.user, 
-            payment_status='completed'
-        ).count()
-        return format_html('<strong>{}</strong> courses', count)
-    enrolled_courses_count.short_description = 'Enrolled Courses'

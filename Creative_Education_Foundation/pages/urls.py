@@ -2,24 +2,33 @@ from django.urls import path
 from .views import (
     AdminView, BaseView, HomeView, MockTestView,ProfileView,
     VacancyListView, VacancyDetailView, VacancyApplicationView,
-    SimplePaymentView, ConfirmPaymentView, ApplicationSuccessView, MyApplicationsView
+    SimplePaymentView, ConfirmPaymentView, ApplicationSuccessView, MyApplicationsView, MyCourses, submit_question
 )
 
 urlpatterns = [
     # Basic pages
     path('', HomeView.as_view(), name='home'),
+    path('submit_question/', submit_question, name='submit_question'),
     path('admin1/', AdminView.as_view(), name='admin'),
     path('base/', BaseView.as_view(), name='base'),
 
     path('mock-test/', MockTestView.as_view(), name='mock_test'),
+    
+    
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('my-courses/', MyCourses.as_view(), name='my_courses'),
     
     # Online classes extra pages
-   
+
     
     # VACANCIES - Clean URLs (NO DUPLICATES)
     path('vacancies/', VacancyListView.as_view(), name='vacancies'),
+    
     path('vacancies/<int:pk>/', VacancyDetailView.as_view(), name='vacancies_description'),
+    
+    
+    
+    
     path('vacancies/<int:vacancy_id>/apply/', VacancyApplicationView.as_view(), name='vacancy_apply'),
     
     # PAYMENT

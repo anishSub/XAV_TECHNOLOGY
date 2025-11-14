@@ -5,9 +5,23 @@ from django.contrib import messages
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+from django.shortcuts import render
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from accounts.models import UserProfile  # Adjust import if needed
+from courses.models import CourseEnrollment  # Adjust import if needed
 
 from .models import Vacancy, VacancyApplication, PaymentLog
 from .forms import VacancyApplicationForm
+
+from courses.views import online_classes_view
+from courses.models import Course
+
+from django.contrib import messages
+from .models import Question
+from django.views.decorators.http import require_http_methods
+
 
 
 # ============= BASIC VIEWS =============
@@ -17,8 +31,22 @@ class AdminView(TemplateView):
 class BaseView(TemplateView):
     template_name = 'base.html'
     
+from django.db.models import Avg   # put at top with other imports
+
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # live courses + real average rating
+        context['featured_courses'] = (
+            Course.objects
+            .filter(is_active=True, course_type='live')
+            .annotate(avg_rating=Avg('reviews__rating'))
+            .order_by('-created_at')[:4]
+        )
+        context['faqs'] = Question.objects.filter(answered=True).order_by('-created_at')[:10]
+        return context
 
 
 
@@ -27,16 +55,59 @@ class MockTestView(TemplateView):
     
 
     
-    
-    
-    
-    
-    
-    
-    
 
-class ProfileView(TemplateView):
+
+@method_decorator(login_required, name='dispatch')
+class ProfileView(View):
     template_name = 'profile.html'
+    
+    def get(self, request):
+        # Get or create user profile
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        
+        context = {
+            'user': request.user,
+            'profile': profile,
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required, name='dispatch')
+class MyCourses(ListView):
+    model = CourseEnrollment
+    template_name = 'my_courses.html'  # Or 'live_classes/my_courses.html' if in a subfolder
+    context_object_name = 'enrollments'
+    
+    def get_queryset(self):
+        return CourseEnrollment.objects.filter(
+            user=self.request.user,
+            payment_status='completed'
+        ).select_related('course').order_by('-enrolled_at')
+        
+
+
+@login_required 
+@require_http_methods(["POST"])
+#Ask Question View
+def submit_question(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        question = request.POST.get('question')
+        suggestions = request.POST.get('suggestions')
+
+        # Save the question to the database
+        Question.objects.create(
+            name=name,
+            email=email,
+            question=question,
+            suggestions=suggestions,
+            answered=False
+        )
+
+        messages.success(request, 'Your question has been submitted successfully!')
+        return redirect('home')
+
+    return render(request, 'home.html')
 
 
 # ============= VACANCY VIEWS =============

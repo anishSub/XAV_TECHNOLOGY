@@ -1,0 +1,171 @@
+.payment-container {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.payment-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.payment-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: #5C2D91;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.payment-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row.total {
+    font-weight: bold;
+    font-size: 18px;
+    color: #5C2D91;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid #5C2D91;
+}
+
+.detail-label {
+    color: #666;
+}
+
+.detail-value {
+    color: #333;
+    font-weight: 500;
+}
+
+.wallet-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.wallet-buttons form {
+    width: 100%;
+}
+
+.btn-pay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.btn-pay img {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+}
+
+.btn-pay.khalti {
+    background: #ebe8ef;
+    color: #121010;
+}
+
+.btn-pay.khalti:hover {
+    background: #a089b2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(92, 45, 145, 0.3);
+}
+
+.btn-pay.esewa {
+    background: #60BB46;
+    color: white;
+}
+
+.btn-pay.esewa:hover {
+    background: #4FA639;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(96, 187, 70, 0.3);
+}
+
+.btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-cancel:hover {
+    color: #333;
+}
+
+.payment-note {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3cd;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .payment-container {
+        margin: 40px 20px;
+        padding: 30px 20px;
+    }
+    
+    .payment-header h1 {
+        font-size: 24px;
+    }
+    
+    .btn-pay {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+    
+    .btn-pay img {
+        height: 20px;
+    }
+}

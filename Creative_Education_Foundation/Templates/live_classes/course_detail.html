@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ course.title }} - Creative Education Foundation{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pages/liveClasses/onlineClass.css' %}">
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="course-detail-container">
+    <div class="course-header">
+        <h1 class="course-title">{{ course.title }}</h1>
+        <div class="course-meta">
+            <span class="meta-badge">{{ course.get_course_type_display }}</span>
+            <span class="meta-badge">⭐ {{ course.rating }}</span>
+            <span class="meta-badge">{{ course.instructor_name }}</span>
+        </div>
+    </div>
+
+    <div class="course-content">
+        <div class="course-main">
+            <h2 class="section-title">Course Description</h2>
+            <p class="course-description">{{ course.description }}</p>
+
+            {% if course.schedule_time %}
+            <h2 class="section-title" style="margin-top: 40px;">Class Schedule</h2>
+            <p class="course-description">{{ course.schedule_time }}</p>
+            {% endif %}
+
+            {% if course.session_details %}
+            <h2 class="section-title" style="margin-top: 40px;">Session Details</h2>
+            <p class="course-description">{{ course.session_details }}</p>
+            {% endif %}
+        </div>
+
+        <div class="course-sidebar">
+            {% if is_enrolled %}
+                <div class="price-section">
+                    <p style="color: #10b981; font-weight: 600; font-size: 18px;">✓ Already Enrolled</p>
+                </div>
+                <a href="{% url 'profile' %}" class="btn-enroll btn-enrolled">
+                    View in My Courses
+                </a>
+            {% else %}
+                <div class="price-section">
+                    {% if course.discount_percentage > 0 %}
+                        <p class="original-price">Rs. {{ course.price }}</p>
+                        <p class="current-price">Rs. {{ discounted_price|floatformat:0 }}</p>
+                        <span class="discount-badge">{{ course.discount_percentage }}% OFF</span>
+                    {% else %}
+                        <p class="current-price">Rs. {{ course.price|floatformat:0 }}</p>
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'enroll_course' course.id %}" class="btn-enroll">
+                        Enroll Now
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'course_detail' course.id %}" class="btn-enroll">
+                        Login to Enroll
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px;">Course Includes:</h3>
+            <ul class="course-info-list">
+                <li>
+                    <span>Duration</span>
+                    <strong>{{ course.duration|default:"Full Course" }}</strong>
+                </li>
+                <li>
+                    <span>Access</span>
+                    <strong>1 Year</strong>
+                </li>
+                <li>
+                    <span>Live Classes</span>
+                    <strong>Yes</strong>
+                </li>
+                <li>
+                    <span>Study Materials</span>
+                    <strong>Included</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
