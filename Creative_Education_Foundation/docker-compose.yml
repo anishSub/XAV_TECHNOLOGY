@@ -1,0 +1,50 @@
+# Tells Docker Compose which syntax/features to use. '3.8' is a stable version supporting modern features like depends_on conditions.
+version: '3.8'
+
+# Services are like blueprints for containers. "web" is a conventional name for the application service.
+services:
+# Services are like blueprints for containers. "web" is a conventional name for the application service.
+  web:
+    build: .  # Builds from your Dockerfile in the current directory nstead of using a pre-built image, it builds one locally using your Dockerfile. The comment explains this for clarity.
+    command: sh -c "
+                  echo 'Waiting for MySQL...';
+                  while ! nc -z db 3306; do sleep 1; done;
+                  echo 'MySQL is ready';
+                  python manage.py migrate &&
+                  python manage.py runserver 0.0.0.0:8000 "
+
+    volumes:
+      - .:/app  # Mounts your code for development (remove for production to avoid overriding)
+    ports:
+      - "8000:8000"  # Exposes Django on host port 8000
+    depends_on:
+      - db  # Ensures MySQL starts first
+
+      # The DATABASE_PASSWORD in your docker-compose.yml (set to anish123 in the snippet) is the password that your Django app will use to connect to the MySQL database. This needs to match the actual password configured for the MySQL user anish inside the db container—not any password from your Django code itself (Django doesn't "have" its own database password; it just borrows the one you provide for the DB connection).
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD} # Set a strong password
+
+  db:
+    image: mysql:8.0  # Official MySQL image
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistent storage for DB data
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Matches Django's DB password
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"  # Optional: Exposes MySQL for external tools like MySQL Workbench
+
+volumes:
+  mysql_data:  # Defines the persistent volume
+
+
+# Purpose: When the MySQL container starts for the first time (i.e., no existing data in the mysql_data volume), the official MySQL Docker image uses this variable to automatically configure the root user's password. The root user is MySQL's built-in superuser—it has full administrative privileges over the entire database server (e.g., creating/deleting databases, users, tables, or running backups).
+# How it's used:
+# On first run: MySQL initializes the database, sets the root password to whatever you provide (e.g., anish123), and secures the server. If you don't set this, MySQL will generate a random one and log it, but providing it explicitly makes it predictable and easier to manage.
+# On subsequent runs: If the volume already has data, this variable is ignored (the existing root password from previous init persists).
+
+# Why provide it?: It's required for security—without it, the container might fail or use defaults. It allows you (or tools) to connect as root for admin tasks, like creating custom users (e.g., anish) or importing data.

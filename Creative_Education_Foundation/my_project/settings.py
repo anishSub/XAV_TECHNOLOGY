@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-b-)z!pg-&#_)dl-q)w%pd$94hgucye4k%*ota)mw4c*8-v-vhq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -95,6 +96,37 @@ DATABASES = {
 }
 
 
+# Inside the Django container its own “localhost” is itself, not your Mac.
+# Docker Compose gives the MySQL container a name (db) and puts both containers on the same virtual network, so Django must use that name as the host:
+
+# When you go back to your Mac-only project
+# Just revert the settings:
+# Python
+# Copy
+# DATABASES = {
+#     'default': {
+#         ...
+#         'HOST': 'localhost',   # or 127.0.0.1
+#         'PORT': '3306',
+#     }
+# }
+# and shut down the Docker stack:
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('DATABASE_NAME', 'creative_education_db'),
+#         'USER': os.getenv('DATABASE_USER', 'anish'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'Anish#937'),
+#         'HOST': os.getenv('DATABASE_HOST', 'db'),   # <- now reads env
+#         'PORT': os.getenv('DATABASE_PORT', '3306'),
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'connect_timeout': 10,
+#         },
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -135,6 +167,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -148,6 +183,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024  # 4MB
+
+
 
 LOGIN_URL = 'login'  # This should match the name of your login URL pattern
 LOGIN_REDIRECT_URL = 'home'  # This should match the name of the URL you want to redirect to after login
