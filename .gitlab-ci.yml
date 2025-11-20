@@ -1,0 +1,28 @@
+# .gitlab-ci.yml
+
+# Define the stages that the pipeline will run.
+# Stages run sequentially.
+stages:
+  - test
+
+# Define a single job to run in the 'test' stage.
+check_sync:
+  # Specify the stage this job belongs to.
+  stage: test
+
+  # Define the Docker image (base environment) where this job will run.
+  # We use a small, reliable image (Alpine Linux) for quick execution.
+  image: alpine:latest
+
+  # The 'script' section contains the shell commands to execute.
+  script:
+    - echo "==============================================="
+    - echo "🎉 CI/CD Pipeline successfully triggered!"
+    - echo "✅ Code has synced from GitHub to GitLab."
+    - echo "==============================================="
+    - echo "Current commit SHA: $CI_COMMIT_SHA"
+    - echo "Current branch: $CI_COMMIT_REF_NAME"
+
+  # Ensure this job runs when the pipeline is triggered by the GitHub webhook/mirror.
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
