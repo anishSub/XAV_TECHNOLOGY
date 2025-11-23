@@ -30,6 +30,7 @@ docker_build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
   script:
+    - cd Creative_Education_Foundation
     # We build for AMD64 so it works on servers, even though you use Mac M2
     - docker build --platform linux/amd64 -t $DOCKER_IMAGE:$TAG .
     - docker push $DOCKER_IMAGE:$TAG
