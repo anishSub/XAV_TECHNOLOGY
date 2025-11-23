@@ -19,6 +19,7 @@ Ignore specific Kubernetes secret manifests if they contain real data
 
 k8s/secrets.yaml
 secret.yaml
+Creative_Education_Foundation/k8s/secrets.yaml
 
 --- Python & Django ---
 
