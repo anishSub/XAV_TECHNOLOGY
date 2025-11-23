@@ -81,19 +81,19 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'creative_education_db',
-        'USER': 'anish',
-        'PASSWORD': 'Anish#937',
-        'HOST': 'localhost',  # or the IP of your database server
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'creative_education_db',
+#         'USER': 'anish',
+#         'PASSWORD': 'Anish#937',
+#         'HOST': 'localhost',  # or the IP of your database server
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
 
 
 # Inside the Django container its own “localhost” is itself, not your Mac.
@@ -112,20 +112,20 @@ DATABASES = {
 # }
 # and shut down the Docker stack:
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.getenv('DATABASE_NAME', 'creative_education_db'),
-#         'USER': os.getenv('DATABASE_USER', 'anish'),
-#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'Anish#937'),
-#         'HOST': os.getenv('DATABASE_HOST', 'db'),   # <- now reads env
-#         'PORT': os.getenv('DATABASE_PORT', '3306'),
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#             'connect_timeout': 10,
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DATABASE_NAME', 'creative_education_db'),
+        'USER': os.getenv('DATABASE_USER', 'anish'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'Anish#937'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),   # <- now reads env
+        'PORT': os.getenv('DATABASE_PORT', '3306'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'connect_timeout': 10,
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

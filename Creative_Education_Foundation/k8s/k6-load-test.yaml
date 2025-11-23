@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-script
+data:
+  load-test.js: |
+    import http from 'k6/http';
+    import { sleep } from 'k6';
+    
+    export default function () {
+      // NOTE: Ensure this matches your Service Port. 
+      // If your Service uses port 80, change 8000 to 80 below.
+      http.get('http://django-service:8000');
+      sleep(1);
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: xav-load-tester
+spec:
+  template:
+    spec:
+      containers:
+      - name: k6
+        image: grafana/k6
+        # COMMAND: Run the script found at the path /script/load-test.js
+        command: ["k6", "run", "--vus", "50", "--duration", "2m", "/script/load-test.js"]
+        volumeMounts:
+        - name: script-volume
+          mountPath: /script
+      restartPolicy: Never
+      volumes:
+      - name: script-volume
+        configMap:
+          name: k6-script
+  backoffLimit: 4

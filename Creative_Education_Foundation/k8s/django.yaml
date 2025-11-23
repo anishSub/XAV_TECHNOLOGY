@@ -1,0 +1,65 @@
+# 1. Django Service
+# Exposes the Django app so we can access it.
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+spec:
+  type: NodePort # Allows access via a static port on the cluster node
+  selector:
+    app: django
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30000 # We fix this port to make it easier to access in the guide
+
+---
+# 2. Django Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+      - name: django
+        image: anish171/my-django-app:v1  #dockerhub image name
+        imagePullPolicy: Always   # Always pull the latest image
+        ports:
+        - containerPort: 8000
+        
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
+        
+        # Inject environment variables
+        envFrom:
+        - configMapRef:
+            name: django-config
+        - secretRef:
+            name: django-secrets
+
+        # The startup command (adapted from your docker-compose)
+        # Note: We changed 'nc -z db' to 'nc -z mysql-service'
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo 'Waiting for MySQL...';
+            while ! nc -z mysql-service 3306; do sleep 1; done;
+            echo 'MySQL is ready';
+            python manage.py migrate;
+            python manage.py runserver 0.0.0.0:8000;
+            
