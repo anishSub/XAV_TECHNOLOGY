@@ -1,0 +1,70 @@
+--- Security (CRITICAL) ---
+
+Never commit environment variable files containing passwords/keys
+
+.env
+.env.local
+.env.dev
+.env.prod
+
+Ignore keys and certificates
+
+*.pem
+*.key
+*.p12
+
+Ignore specific Kubernetes secret manifests if they contain real data
+
+(Keep config-secrets.yaml if it is just for the lab/dummy data)
+
+k8s/secrets.yaml
+secret.yaml
+
+--- Python & Django ---
+
+Compiled python modules (Junk)
+
+pycache/
+*.py[cod]
+*$py.class
+
+Local errors/logs
+
+*.log
+
+Local Database (Do not overwrite the server's DB with yours)
+
+db.sqlite3
+db.sqlite3-journal
+
+User uploads (These belong on the server, not git)
+
+media/
+staticfiles/
+
+--- Virtual Environments ---
+
+Ignore the folder where you installed your python libraries
+
+.venv/
+venv/
+env/
+ENV/
+
+--- Mac OS (Apple Silicon/Intel) ---
+
+.DS_Store
+
+--- IDE Settings ---
+
+VS Code
+
+.vscode/
+
+PyCharm
+
+.idea/
+
+--- Docker ---
+
+docker-compose.override.yml
