@@ -42,7 +42,7 @@ deploy_trigger:
   script:
     - echo "🚀 CI Build Successful."
     - echo "⚠️  Deployment target is a LOCAL Kind Cluster."
-    - echo "👉 Action Required: Run './deploy_and_test.sh' on the developer machine to pull the new image."
+    - echo "👉 Action Required  Run './deploy_and_test.sh' on the developer machine to pull the new image."
 
 # STAGE 4: VERIFY (Placeholder for Local Execution)
 load_test_trigger:
